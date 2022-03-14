@@ -1,79 +1,93 @@
-import PySimpleGUI as sg
+import sys, getopt, re
+from attacks.email import email
+from attacks.navigation import in_navigation, out_navigation
+from attacks.endpoint import endpoint
 
-def run() :
 
-    # ----------- Create the 3 layouts this Window will display -----------
-    initialLayout = [[sg.Text('AuditAll')],
-            [sg.Text('Selecciona uno de los siguientes vectores de ataque:')],
-            [sg.Button('Correo electrónico')],
-            [sg.Button('Navegación entrante')],
-            [sg.Button('Navegación saliente')],
-            [sg.Button('Endpoint')]]
+arguments = sys.argv[1:]
 
-    # EMAIL LAYOUTS
-    emailLayout = [[sg.Text('Correo electrónico')],
-            [sg.Input(key='emailInput')],
-            [sg.Button('Analizar'), sg.Button('Volver')]]
+short_options = "he:np"
+long_options = ["help","email=","navigation","endpoint"]
+
+run_options = {
+    "email" : False,
+    "navigation" : False,
+    "endpoint" : False
+}
+
+##Familias de malware mas comunes. Serán utilizadas posteriormente para recopilar y categorizar las muestras.
+COMMON_MALWARE_FAMILIES = ["AgentTesla","ArkeyStealer","AsyncRAT","CobaltStrike","CoinMiner",
+"DCRat","Formbook","Gafgyt","Heodo","Loki","Mirai","Quakbot","RacconStealer","RedLineStealer","RemcosRAT"
+,"SnakeKeylogger","Tsunami"]
+
+
+
+
+##Depuracion de los argumentos del comando
+
+try:
+    arguments, values = getopt.getopt(arguments, short_options, long_options)
+except getopt.error as err:
+    print (str(err))
+    sys.exit(2)
+
+if(len(arguments) == 0):
+    sys.exit("Usage: python auditall.py [--help] [--email] \"email@target.com\" [--navigation] [--endpoint]")
+
+
+if (("-h","") in arguments or ("--help", "") in arguments) and len(arguments) > 1:
+    sys.exit("Usage: python auditall.py [--help] [--email] \"email@target.com\" [--navigation] [--endpoint]")
+
+
+if (("-h","") not in arguments and ("--help", "") not in arguments) and len(arguments) > 4 :
+    sys.exit("Usage: python auditall.py [--help] [--email] \"email@target.com\" [--navigation] [--endpoint]")
+
+
+##Obtencion de los valores de los argumentos
+for current_argument, current_value in arguments:
+    if current_argument in ("-h", "--help"):
+        print ('''Usage: python auditall.py [--help] [--email] \"email@target.com\" [--navigation] [--endpoint]
+        
+        ARGUMENT             DESC
+        ---------------------------
+        -h / --help      
+        -e / --email         Scan the target email's security towards malicious mails 
+        -n / --navigation    Scan incoming and outgoing navigation of the local host
+        -p / --endpoint      Scan endpoint security of the local host'''
+        )
+        sys.exit()
+    elif current_argument in ("-e", "--email"):
+        if(not re.match("^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$",current_value)):
+            sys.exit("\'--email\' value must have the following FORMAT: \'XXXX@YYYY.ZZZ\'")
+
+        run_options["email"] = True
+        target_email = current_value
+
+    elif current_argument in ("-n", "--navigation"):
+        run_options["navigation"] = True
+
+    elif current_argument in ("-p", "--endpoint"):
+        run_options["endpoint"] = True
     
-    emailResultsLayout = [[sg.Text('EMAIL RESULTS')],
-            [sg.Button('Volver')]]
+    else:
+        sys.exit("Unknown argument: \'" + current_argument + "\'")
 
-    #IN NAVIGATION LAYOUTS
-    inNavigationLayout = [[sg.Text('IN NAVIGATION')],
-            [sg.Button('Volver')]]
+
+##VECTOR DE ATAQUE: EMAIL
+if(run_options["email"] == True):
+    print("Analyzing "+ target_email +" ...")
+    email.analyze()
     
-    inNavigationResultsLayout = [[sg.Text('IN NAVIGATION RESULTS')]]
-    
-    #OUT NAVIGATION LAYOUTS
-    outNavigationLayout = [[sg.Text('OUT NAVIGATION')],
-            [sg.Button('Volver')]]
-    
-    outNavigationResultsLayout = [[sg.Text('OUT NAVIGATION RESULTS')]]
 
-    #ENDPOINT LAYOUTS
-    endpointLayout = [[sg.Text('ENDPOINT')],
-            [sg.Button('Volver')]]
+##VECTOR DE ATAQUE: NAVEGACION
+if(run_options["navigation"] == True):
 
-    endpointResultsLayout = [[sg.Text('ENDPOINT RESULTS')]]
+#### NAVEGACION ENTRANTE
+    print("Analyzing incoming navigation...")
 
+#### NAVEGACION SALIENTE
+    print("Analyzing outgoing navigation...")
 
-    layout = [[sg.Column(initialLayout, key='initial'), sg.Column(emailLayout, visible=False, key='email'), sg.Column(emailResultsLayout, visible=False, key='emailResults'), sg.Column(inNavigationLayout, visible=False, key='innav'),
-               sg.Column(outNavigationLayout, visible=False, key='outnav'), sg.Column(endpointLayout, visible=False, key='endpoint')]]
-
-    window = sg.Window('AuditAll', layout)
-
-    layout = 'initial'  # The currently visible layout
-
-    while True:
-        event, values = window.read()
-        print(event, values)
-        if event is None:
-            break
-        if event == 'Correo electrónico':
-            print("HOLAAAAAAA")
-            window[layout].update(visible=False)
-            layout = 'email'
-            window['email'].update(visible=True)
-        elif event == 'Navegación entrante':
-            window[layout].update(visible=False)
-            layout = 'innav'
-            window['innav'].update(visible=True)
-        elif event == 'Navegación saliente':
-            window[layout].update(visible=False)
-            layout = 'outnav'
-            window['outnav'].update(visible=True)
-        elif event == 'Endpoint':
-            window[layout].update(visible=False)
-            layout = 'endpoint'
-            window['endpoint'].update(visible=True)
-        elif event == 'Analizar':
-            window[layout].update(visible=False)
-            layout = 'emailResults'
-            window['emailResults'].update(visible=True)
-        elif event.find("Volver") != -1:
-            window[layout].update(visible=False)
-            layout = 'initial'
-            window['initial'].update(visible=True)
-    window.close()
-
-    
+##VECTOR DE ATAQUE: ENDPOINT
+if(run_options["endpoint"] == True):
+    print("Analyzing endpoint...")
