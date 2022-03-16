@@ -2,6 +2,7 @@ import sys, getopt, re
 from attacks.email import email
 from attacks.navigation import in_navigation, out_navigation
 from attacks.endpoint import endpoint
+from termcolor import colored
 
 
 arguments = sys.argv[1:]
@@ -19,8 +20,6 @@ run_options = {
 COMMON_MALWARE_FAMILIES = ["AgentTesla","ArkeyStealer","AsyncRAT","CobaltStrike","CoinMiner",
 "DCRat","Formbook","Gafgyt","Heodo","Loki","Mirai","Quakbot","RacconStealer","RedLineStealer","RemcosRAT"
 ,"SnakeKeylogger","Tsunami"]
-
-
 
 
 ##Depuracion de los argumentos del comando
@@ -72,22 +71,65 @@ for current_argument, current_value in arguments:
     else:
         sys.exit("Unknown argument: \'" + current_argument + "\'")
 
+##Si firstTime = True  ==> es necesario recopilar malware de la BD
+##             = False ==> no hacer llamadas a la BD 
+firstTime = True
 
 ##VECTOR DE ATAQUE: EMAIL
 if(run_options["email"] == True):
-    print("Analyzing "+ target_email +" ...")
-    email.analyze()
-    
+    print("TARGET: "+ target_email)
+    email.analyze(firstTime, COMMON_MALWARE_FAMILIES)
+    firstTime = False
+    print('')
+    print('')
+    print('')
+    print("###################################################")
+    print("###################### EMAIL ######################")
+    print("###################################################")
+    print('')
+    print('')
+    print('')
 
 ##VECTOR DE ATAQUE: NAVEGACION
 if(run_options["navigation"] == True):
 
 #### NAVEGACION ENTRANTE
-    print("Analyzing incoming navigation...")
+    in_navigation.analyze(firstTime, COMMON_MALWARE_FAMILIES)
+    firstTime = False
+
+    print('')
+    print('')
+    print('')
+    print("###################################################")
+    print("############### INCOMING NAVIGATION ###############")
+    print("###################################################")
+    print('')
+    print('')
+    print('')
 
 #### NAVEGACION SALIENTE
-    print("Analyzing outgoing navigation...")
+    out_navigation.analyze(COMMON_MALWARE_FAMILIES)
+
+    print('')
+    print('')
+    print('')
+    print("###################################################")
+    print("############### OUTGOING NAVIGATION ###############")
+    print("###################################################")
+    print('')
+    print('')
+    print('')
 
 ##VECTOR DE ATAQUE: ENDPOINT
 if(run_options["endpoint"] == True):
-    print("Analyzing endpoint...")
+    endpoint.analyze(firstTime, COMMON_MALWARE_FAMILIES)
+    firstTime = False
+    print('')
+    print('')
+    print('')
+    print("###################################################")
+    print("#################### ENDPOINT #####################")
+    print("###################################################")
+    print('')
+    print('')
+    print('')
