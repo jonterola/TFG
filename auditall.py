@@ -73,7 +73,7 @@ for current_argument, current_value in arguments:
 
 ##Si firstTime = True  ==> es necesario recopilar malware de la BD
 ##             = False ==> no hacer llamadas a la BD 
-firstTime = True
+firstTime = False
 
 ##VECTOR DE ATAQUE: EMAIL
 if(run_options["email"] == True):

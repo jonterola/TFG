@@ -1,4 +1,4 @@
-import requests, json
+import requests, json, time
 from termcolor import colored
 
 ## All the malware is extracted from MalwareBazaar project. The goal of this project is to share malware samples
@@ -68,5 +68,21 @@ def getMalwareURLs(malwareFamily):
 #Descargar las muestras de malware que coincidan con los hashes sha-256
 def getMalwareSamples(malwareHashes):
     print("Recopilando MalwareSamples...")
+    print('')
+
+    for mal in malwareHashes:
+        time.sleep(1)
+        try:
+            data = {'query': 'get_file', 'sha256_hash': mal}
+            url = "https://mb-api.abuse.ch/api/v1/"
+            malfile = requests.post(url, data=data)
+
+            with open('../malsamples/'+ mal + '.zip', 'wb') as f:
+                f.write(malfile.content)
+        except:
+            print("Algo no ha ido como se esperaba... :(")
+    
+    print('Malware recopilado con exito!')
+    print('')
     print('')
 
