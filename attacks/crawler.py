@@ -1,4 +1,4 @@
-import requests, json, time
+import requests, json, time, pathlib, os, shutil
 from termcolor import colored
 
 ## All the malware is extracted from MalwareBazaar project. The goal of this project is to share malware samples
@@ -7,11 +7,12 @@ from termcolor import colored
 ## For its use a API key is needed. You can get yours by registering in : https://bazaar.abuse.ch/
 
 API_KEY = "9e24bc6c5347c236c79b8d25a8ddc1a9"
-
+DIRECTORY_PATH = pathlib.Path().resolve()
 
 
 #Obtener mediante consultas a la BD muestras de malware que formen parte de una familia de malware determinada
 def getMalware(malwareFamily):
+
     print("Crawling malware: " + malwareFamily.upper())
     print('')
 
@@ -32,7 +33,7 @@ def getMalware(malwareFamily):
 
         print(str(len(malwareHashes)) + ' muestras encontradas.')
         
-        getMalwareSamples(malwareHashes)
+        getMalwareSamples(malwareHashes, malwareFamily)
 
 
 #Obtener lista de URLs e IPs maliciosas
@@ -66,9 +67,12 @@ def getMalwareURLs(malwareFamily):
 
 
 #Descargar las muestras de malware que coincidan con los hashes sha-256
-def getMalwareSamples(malwareHashes):
+def getMalwareSamples(malwareHashes, malwareFamily):
     print("Recopilando MalwareSamples...")
     print('')
+
+    samplePath = str(DIRECTORY_PATH) + "/malsamples/" + malwareFamily + "/"
+    os.mkdir(samplePath)
 
     for mal in malwareHashes:
         time.sleep(1)
@@ -77,11 +81,12 @@ def getMalwareSamples(malwareHashes):
             url = "https://mb-api.abuse.ch/api/v1/"
             malfile = requests.post(url, data=data)
 
-            with open('../malsamples/'+ mal + '.zip', 'wb') as f:
-                f.write(malfile.content)
         except:
             print("Algo no ha ido como se esperaba... :(")
     
+    
+        with open(samplePath + mal +".zip", "wb") as f:
+            f.write(malfile.content)
     print('Malware recopilado con exito!')
     print('')
     print('')

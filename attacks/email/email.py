@@ -1,6 +1,6 @@
 from attacks import crawler
 from termcolor import colored
-import win32com.client
+#import win32com.client
 
 ##GMAIL##
 

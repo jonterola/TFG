@@ -1,4 +1,4 @@
-import sys, getopt, re
+import sys, getopt, re, shutil, pathlib, os
 from attacks.email import email
 from attacks.navigation import in_navigation, out_navigation
 from attacks.endpoint import endpoint
@@ -17,10 +17,17 @@ run_options = {
 }
 
 ##Familias de malware mas comunes. Serán utilizadas posteriormente para recopilar y categorizar las muestras.
-COMMON_MALWARE_FAMILIES = ["AgentTesla","ArkeyStealer","AsyncRAT","CobaltStrike","CoinMiner",
-"DCRat","Formbook","Gafgyt","Heodo","Loki","Mirai","Quakbot","RacconStealer","RedLineStealer","RemcosRAT"
-,"SnakeKeylogger","Tsunami"]
+COMMON_MALWARE_FAMILIES = ["AgentTesla","ArkeyStealer"]#,"AsyncRAT","CobaltStrike","CoinMiner",
+#"DCRat","Formbook","Gafgyt","Heodo","Loki","Mirai","Quakbot","RacconStealer","RedLineStealer","RemcosRAT"
+#,"SnakeKeylogger","Tsunami"]
 
+#Path del directorio principal del proyecto
+DIRECTORY_PATH = pathlib.Path().resolve()
+
+
+def clear():
+    malwareDirectoryPath = str(pathlib.Path().resolve()) + '/malsamples/'
+    shutil.rmtree(malwareDirectoryPath)
 
 ##Depuracion de los argumentos del comando
 
@@ -73,7 +80,17 @@ for current_argument, current_value in arguments:
 
 ##Si firstTime = True  ==> es necesario recopilar malware de la BD
 ##             = False ==> no hacer llamadas a la BD 
-firstTime = False
+firstTime = True
+
+##Creacion de la carpeta malsamples donde se guardaran todas las muestras comprimidas
+malwarePath = str(DIRECTORY_PATH) + '/malsamples/'
+if os.path.exists(malwarePath):
+    shutil.rmtree(malwarePath)
+
+os.mkdir(malwarePath)
+print('')
+print('FOLDER WITH MALWARE SAMPLES CREATED ON : ' + malwarePath)
+print('')
 
 ##VECTOR DE ATAQUE: EMAIL
 if(run_options["email"] == True):
@@ -133,3 +150,9 @@ if(run_options["endpoint"] == True):
     print('')
     print('')
     print('')
+
+
+clear()
+
+
+
