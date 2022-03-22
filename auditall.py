@@ -1,4 +1,5 @@
 import sys, getopt, re, shutil, pathlib, os
+import settings
 from attacks.email import email
 from attacks.navigation import in_navigation, out_navigation
 from attacks.endpoint import endpoint
@@ -17,13 +18,9 @@ run_options = {
     "endpoint" : False
 }
 
-##Familias de malware mas comunes. Serán utilizadas posteriormente para recopilar y categorizar las muestras.
-COMMON_MALWARE_FAMILIES = ["AgentTesla","ArkeyStealer"]#,"AsyncRAT","CobaltStrike","CoinMiner",
-#"DCRat","Formbook","Gafgyt","Heodo","Loki","Mirai","Quakbot","RacconStealer","RedLineStealer","RemcosRAT"
-#,"SnakeKeylogger","Tsunami"]
 
-#Path del directorio principal del proyecto
-DIRECTORY_PATH = pathlib.Path().resolve()
+
+
 
 ##Eliminar muestras de malware descargadas
 def clear():
@@ -84,18 +81,15 @@ for current_argument, current_value in arguments:
 ##             = False ==> no hacer llamadas a la BD 
 firstTime = True
 
-##Creacion de la carpeta docs
-docsPath = str(DIRECTORY_PATH) + '/docs/'
-if not os.path.exists(docsPath):
-    os.mkdir(docsPath)
+settings.init()
 
 ##Generación de la clave de encriptacion para la descarga de las muestras
 clave = Fernet.generate_key()
-with open(docsPath + 'clave.key', 'wb') as key :
+with open(str(settings.DIRECTORY_PATH) + '/malcrypto/clave.key', 'wb') as key :
     key.write(clave)
 
 ##Creacion de la carpeta malsamples donde se guardaran todas las muestras comprimidas
-malwarePath = str(DIRECTORY_PATH) + '/malsamples/'
+malwarePath = str(settings.DIRECTORY_PATH) + '/malsamples/'
 if os.path.exists(malwarePath):
     shutil.rmtree(malwarePath)
 
@@ -107,7 +101,7 @@ print('')
 ##VECTOR DE ATAQUE: EMAIL
 if(run_options["email"] == True):
     print("TARGET: "+ target_email)
-    email.analyze(firstTime, COMMON_MALWARE_FAMILIES)
+    email.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
     firstTime = False
     print('')
     print('')
@@ -123,7 +117,7 @@ if(run_options["email"] == True):
 if(run_options["navigation"] == True):
 
 #### NAVEGACION ENTRANTE
-    in_navigation.analyze(firstTime, COMMON_MALWARE_FAMILIES)
+    in_navigation.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
     firstTime = False
 
     print('')
@@ -137,7 +131,7 @@ if(run_options["navigation"] == True):
     print('')
 
 #### NAVEGACION SALIENTE
-    out_navigation.analyze(COMMON_MALWARE_FAMILIES)
+    out_navigation.analyze(settings.COMMON_MALWARE_FAMILIES)
 
     print('')
     print('')
@@ -151,7 +145,7 @@ if(run_options["navigation"] == True):
 
 ##VECTOR DE ATAQUE: ENDPOINT
 if(run_options["endpoint"] == True):
-    endpoint.analyze(firstTime, COMMON_MALWARE_FAMILIES)
+    endpoint.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
     firstTime = False
     print('')
     print('')
@@ -163,7 +157,7 @@ if(run_options["endpoint"] == True):
     print('')
     print('')
 
-
+print(settings.MALWAREDICT)
 ##clear()
 
 

@@ -1,6 +1,6 @@
-import requests, json, time, pathlib, os, shutil
+import requests, json, time, pathlib, os, shutil, settings
 from termcolor import colored
-from cryptography.fernet import Fernet
+from malcrypto import cryptography
 
 ## All the malware is extracted from MalwareBazaar project. The goal of this project is to share malware samples
 ## with the infosec community, AV vendors and threat intelligence providers.
@@ -21,21 +21,24 @@ def getMalware(malwareFamily):
     data = {'query': 'get_siginfo', 'signature': malwareFamily, 'limit': 50}
     url = "https://mb-api.abuse.ch/api/v1/"
     response = requests.post(url, data=data).json()
+    
+    malwareInfo = {}
 
     if response['query_status'] != 'ok' :
         print('No sample found.')
 
     else:
         data = response['data']
-        malwareHashes = []
 
         for mal in data:
-            malwareHashes.append(mal['sha256_hash'])
+            malwareInfo[mal['sha256_hash']] = mal['file_type']
 
-        print(str(len(malwareHashes)) + ' muestras encontradas.')
-        
-        getMalwareSamples(malwareHashes, malwareFamily)
+        print(str(len(malwareInfo)) + ' muestras encontradas.')
+        settings.MALWAREDICT[malwareFamily] = malwareInfo
 
+        getMalwareSamples(malwareInfo, malwareFamily)
+
+    
 
 #Obtener lista de URLs e IPs maliciosas
 def getMalwareURLs(malwareFamily):
@@ -68,14 +71,15 @@ def getMalwareURLs(malwareFamily):
 
 
 #Descargar las muestras de malware que coincidan con los hashes sha-256
-def getMalwareSamples(malwareHashes, malwareFamily):
-    print("Recopilando MalwareSamples...")
+def getMalwareSamples(malwareInfo, malwareFamily):
+    print('')
+    print("Descargando muestras...")
     print('')
 
     samplePath = str(DIRECTORY_PATH) + "/malsamples/" + malwareFamily + "/"
     os.mkdir(samplePath)
 
-    for mal in malwareHashes:
+    for mal in malwareInfo:
         time.sleep(0.5)
         try:
             data = {'query': 'get_file', 'sha256_hash': mal}
@@ -85,7 +89,7 @@ def getMalwareSamples(malwareHashes, malwareFamily):
         except:
             print("Algo no ha ido como se esperaba... :(")
     
-        encryptedMalware = encryptMalware(malfile.content)
+        encryptedMalware =  cryptography.encrypt(malfile.content)
 
         with open(samplePath + mal +".zip", "wb") as f:
             f.write(encryptedMalware)
@@ -94,10 +98,3 @@ def getMalwareSamples(malwareHashes, malwareFamily):
     print('')
 
 
-##Encriptar muestra malware
-def encryptMalware(malwareContent):
-    keyPath = str(DIRECTORY_PATH) + '/docs/clave.key'
-    with open(keyPath, 'rb') as key:
-        clave = key.read()
-    f = Fernet(clave)
-    return f.encrypt(malwareContent)
