@@ -3,6 +3,7 @@ from attacks.email import email
 from attacks.navigation import in_navigation, out_navigation
 from attacks.endpoint import endpoint
 from termcolor import colored
+from cryptography.fernet import Fernet
 
 
 arguments = sys.argv[1:]
@@ -24,7 +25,7 @@ COMMON_MALWARE_FAMILIES = ["AgentTesla","ArkeyStealer"]#,"AsyncRAT","CobaltStrik
 #Path del directorio principal del proyecto
 DIRECTORY_PATH = pathlib.Path().resolve()
 
-
+##Eliminar muestras de malware descargadas
 def clear():
     malwareDirectoryPath = str(pathlib.Path().resolve()) + '/malsamples/'
     shutil.rmtree(malwareDirectoryPath)
@@ -37,14 +38,15 @@ except getopt.error as err:
     print (str(err))
     sys.exit(2)
 
+##Ningun argumento
 if(len(arguments) == 0):
     sys.exit("Usage: python auditall.py [--help] [--email] \"email@target.com\" [--navigation] [--endpoint]")
 
-
+##Argumento help más otros argumentos
 if (("-h","") in arguments or ("--help", "") in arguments) and len(arguments) > 1:
     sys.exit("Usage: python auditall.py [--help] [--email] \"email@target.com\" [--navigation] [--endpoint]")
 
-
+##Mas argumentos de los permitidos
 if (("-h","") not in arguments and ("--help", "") not in arguments) and len(arguments) > 4 :
     sys.exit("Usage: python auditall.py [--help] [--email] \"email@target.com\" [--navigation] [--endpoint]")
 
@@ -81,6 +83,16 @@ for current_argument, current_value in arguments:
 ##Si firstTime = True  ==> es necesario recopilar malware de la BD
 ##             = False ==> no hacer llamadas a la BD 
 firstTime = True
+
+##Creacion de la carpeta docs
+docsPath = str(DIRECTORY_PATH) + '/docs/'
+if not os.path.exists(docsPath):
+    os.mkdir(docsPath)
+
+##Generación de la clave de encriptacion para la descarga de las muestras
+clave = Fernet.generate_key()
+with open(docsPath + 'clave.key', 'wb') as key :
+    key.write(clave)
 
 ##Creacion de la carpeta malsamples donde se guardaran todas las muestras comprimidas
 malwarePath = str(DIRECTORY_PATH) + '/malsamples/'
@@ -152,7 +164,7 @@ if(run_options["endpoint"] == True):
     print('')
 
 
-clear()
+##clear()
 
 
 

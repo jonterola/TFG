@@ -1,5 +1,6 @@
 import requests, json, time, pathlib, os, shutil
 from termcolor import colored
+from cryptography.fernet import Fernet
 
 ## All the malware is extracted from MalwareBazaar project. The goal of this project is to share malware samples
 ## with the infosec community, AV vendors and threat intelligence providers.
@@ -75,7 +76,7 @@ def getMalwareSamples(malwareHashes, malwareFamily):
     os.mkdir(samplePath)
 
     for mal in malwareHashes:
-        time.sleep(1)
+        time.sleep(0.5)
         try:
             data = {'query': 'get_file', 'sha256_hash': mal}
             url = "https://mb-api.abuse.ch/api/v1/"
@@ -84,10 +85,19 @@ def getMalwareSamples(malwareHashes, malwareFamily):
         except:
             print("Algo no ha ido como se esperaba... :(")
     
-    
+        encryptedMalware = encryptMalware(malfile.content)
+
         with open(samplePath + mal +".zip", "wb") as f:
-            f.write(malfile.content)
+            f.write(encryptedMalware)
     print('Malware recopilado con exito!')
     print('')
     print('')
 
+
+##Encriptar muestra malware
+def encryptMalware(malwareContent):
+    keyPath = str(DIRECTORY_PATH) + '/docs/clave.key'
+    with open(keyPath, 'rb') as key:
+        clave = key.read()
+    f = Fernet(clave)
+    return f.encrypt(malwareContent)
