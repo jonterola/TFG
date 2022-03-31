@@ -19,3 +19,7 @@ def init():
 
     for fam in COMMON_MALWARE_FAMILIES:
         MALWAREDICT[fam] = {}
+
+    global SENDER
+    SENDER = {"mail" : "tfg.auditall@gmail.com",
+              "pass" : "auditingThings22"}
