@@ -1,4 +1,6 @@
 import sys, getopt, re, shutil, pathlib, os
+
+from attr import attr
 import settings
 from attacks.email import email
 from attacks.navigation import in_navigation, out_navigation
@@ -9,8 +11,8 @@ from cryptography.fernet import Fernet
 
 arguments = sys.argv[1:]
 
-short_options = "he:np"
-long_options = ["help","email=","navigation","endpoint"]
+short_options = "henp"
+long_options = ["help","email","navigation","endpoint"]
 
 run_options = {
     "email" : False,
@@ -37,21 +39,21 @@ except getopt.error as err:
 
 ##Ningun argumento
 if(len(arguments) == 0):
-    sys.exit("Usage: python auditall.py [--help] [--email] \"email@target.com\" [--navigation] [--endpoint]")
+    sys.exit("Usage: python auditall.py [--help] [--email] [--navigation] [--endpoint]")
 
 ##Argumento help más otros argumentos
 if (("-h","") in arguments or ("--help", "") in arguments) and len(arguments) > 1:
-    sys.exit("Usage: python auditall.py [--help] [--email] \"email@target.com\" [--navigation] [--endpoint]")
+    sys.exit("Usage: python auditall.py [--help] [--email] [--navigation] [--endpoint]")
 
 ##Mas argumentos de los permitidos
 if (("-h","") not in arguments and ("--help", "") not in arguments) and len(arguments) > 4 :
-    sys.exit("Usage: python auditall.py [--help] [--email] \"email@target.com\" [--navigation] [--endpoint]")
+    sys.exit("Usage: python auditall.py [--help] [--email] [--navigation] [--endpoint]")
 
 
 ##Obtencion de los valores de los argumentos
 for current_argument, current_value in arguments:
     if current_argument in ("-h", "--help"):
-        print ('''Usage: python auditall.py [--help] [--email] \"email@target.com\" [--navigation] [--endpoint]
+        print ('''Usage: python auditall.py [--help] [--email] [--navigation] [--endpoint]
         
         ARGUMENT             DESC
         ---------------------------
@@ -62,11 +64,7 @@ for current_argument, current_value in arguments:
         )
         sys.exit()
     elif current_argument in ("-e", "--email"):
-        if(not re.match("^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$",current_value)):
-            sys.exit("\'--email\' value must have the following FORMAT: \'XXXX@YYYY.ZZZ\'")
-
         run_options["email"] = True
-        target_email = current_value
 
     elif current_argument in ("-n", "--navigation"):
         run_options["navigation"] = True
@@ -100,64 +98,61 @@ print('')
 
 ##VECTOR DE ATAQUE: EMAIL
 if(run_options["email"] == True):
-    print("TARGET: "+ target_email)
+    print('')
+    print('')
+    print('')
+    print(colored('###################################################','cyan',attrs=['bold']))
+    print(colored("###################### EMAIL ######################",'cyan',attrs=['bold']))
+    print(colored('###################################################','cyan',attrs=['bold']))
+    print('')
+    print('')
+    print('')
     email.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
     firstTime = False
-    print('')
-    print('')
-    print('')
-    print("###################################################")
-    print("###################### EMAIL ######################")
-    print("###################################################")
-    print('')
-    print('')
-    print('')
-
 ##VECTOR DE ATAQUE: NAVEGACION
 if(run_options["navigation"] == True):
 
 #### NAVEGACION ENTRANTE
+    print('')
+    print('')
+    print('')
+    print(colored('###################################################','cyan',attrs=['bold']))
+    print(colored("############### INCOMING NAVIGATION ###############", 'cyan', attrs=['bold']))
+    print(colored('###################################################','cyan',attrs=['bold']))
+    print('')
+    print('')
+    print('')
     in_navigation.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
     firstTime = False
 
-    print('')
-    print('')
-    print('')
-    print("###################################################")
-    print("############### INCOMING NAVIGATION ###############")
-    print("###################################################")
-    print('')
-    print('')
-    print('')
 
 #### NAVEGACION SALIENTE
+    print('')
+    print('')
+    print('')
+    print(colored('###################################################','cyan',attrs=['bold']))
+    print(colored("############### OUTGOING NAVIGATION ###############", 'cyan', attrs=['bold']))
+    print(colored('###################################################','cyan',attrs=['bold']))
+    print('')
+    print('')
+    print('')
     out_navigation.analyze(settings.COMMON_MALWARE_FAMILIES)
-
-    print('')
-    print('')
-    print('')
-    print("###################################################")
-    print("############### OUTGOING NAVIGATION ###############")
-    print("###################################################")
-    print('')
-    print('')
-    print('')
 
 ##VECTOR DE ATAQUE: ENDPOINT
 if(run_options["endpoint"] == True):
+    print('')
+    print('')
+    print('')
+    print(colored('###################################################','cyan',attrs=['bold']))
+    print(colored('#################### ENDPOINT #####################','cyan', attrs=['bold']))
+    print(colored('###################################################','cyan', attrs=['bold']))
+    print('')
+    print('')
+    print('')
     endpoint.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
     firstTime = False
-    print('')
-    print('')
-    print('')
-    print("###################################################")
-    print("#################### ENDPOINT #####################")
-    print("###################################################")
-    print('')
-    print('')
-    print('')
 
-print(settings.MALWAREDICT)
+
 ##clear()
 
 

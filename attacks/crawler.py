@@ -59,7 +59,14 @@ def getMalwareURLs(malwareFamily):
 
         for mal in data:
             if mal['ioc_type'] == 'ip:port' or mal['ioc_type'] == 'url':
-                malwareInfo.append([mal['ioc'], mal['ioc_type_desc']])
+                ##MALWARE INFO STRUCT:
+                #   0 : HASH
+                #   1 : FILE TYPE
+                #   2 : ENDPOINT RESULT ==> False = Blocked , True = Vulnerable
+                #   3 : EMAIL RESULT ==> None = Blocked , Inbox = Message arrived to Inbox, Spam = Message arrived to Spam
+                #   4 : IN NAVIGATION RESULT ==> False = Blocked, True = Vulnerable
+                
+                malwareInfo.append([mal['ioc'], mal['ioc_type_desc'],False,'None',False])
 
         
         if(len(malwareInfo) == 0):
