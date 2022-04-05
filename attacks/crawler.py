@@ -8,7 +8,6 @@ from malcrypto import cryptography
 ## For its use a API key is needed. You can get yours by registering in : https://bazaar.abuse.ch/
 
 API_KEY = "9e24bc6c5347c236c79b8d25a8ddc1a9"
-DIRECTORY_PATH = pathlib.Path().resolve()
 
 
 #Obtener mediante consultas a la BD muestras de malware que formen parte de una familia de malware determinada
@@ -31,7 +30,13 @@ def getMalware(malwareFamily):
         data = response['data']
 
         for mal in data:
-            malwareInfo[mal['sha256_hash']] = mal['file_type']
+            ##MALWARE INFO STRUCT:
+                #   0 : FILE TYPE
+                #   1 : ENDPOINT RESULT ==> False = Blocked , True = Vulnerable
+                #   2 : EMAIL RESULT ==> None = Blocked , Inbox = Message arrived to Inbox, Spam = Message arrived to Spam
+                #   3 : IN NAVIGATION RESULT ==> False = Blocked, True = Vulnerable
+                #   4 : OUT NAVIGATION RESULT ==> False = Blocked, True = Vulnerable
+            malwareInfo[mal['sha256_hash']] = [mal['file_type'], False, 'None', False, False]
 
         print(str(len(malwareInfo)) + ' muestras encontradas.')
         settings.MALWAREDICT[malwareFamily] = malwareInfo
@@ -41,6 +46,7 @@ def getMalware(malwareFamily):
     
 
 #Obtener lista de URLs e IPs maliciosas
+##HAY QUE CAMBIAR TODO, HAY QUE USAR URLHAUS
 def getMalwareURLs(malwareFamily):
     print("Crawling malware: " + malwareFamily.upper())
     print('')
@@ -58,15 +64,8 @@ def getMalwareURLs(malwareFamily):
         malwareInfo = []
 
         for mal in data:
-            if mal['ioc_type'] == 'ip:port' or mal['ioc_type'] == 'url':
-                ##MALWARE INFO STRUCT:
-                #   0 : HASH
-                #   1 : FILE TYPE
-                #   2 : ENDPOINT RESULT ==> False = Blocked , True = Vulnerable
-                #   3 : EMAIL RESULT ==> None = Blocked , Inbox = Message arrived to Inbox, Spam = Message arrived to Spam
-                #   4 : IN NAVIGATION RESULT ==> False = Blocked, True = Vulnerable
-                
-                malwareInfo.append([mal['ioc'], mal['ioc_type_desc'],False,'None',False])
+            if mal['ioc_type'] == 'ip:port' or mal['ioc_type'] == 'url':                    
+                malwareInfo.append([mal['ioc'], mal['ioc_type_desc']])
 
         
         if(len(malwareInfo) == 0):
@@ -83,7 +82,7 @@ def getMalwareSamples(malwareInfo, malwareFamily):
     print("Descargando muestras...")
     print('')
 
-    samplePath = str(DIRECTORY_PATH) + "/malsamples/" + malwareFamily + "/"
+    samplePath = str(settings.DIRECTORY_PATH) + "/malsamples/" + malwareFamily + "/"
     os.mkdir(samplePath)
 
     for mal in malwareInfo:

@@ -91,6 +91,11 @@ def analyze(firstTime, COMMON_MALWARE_FAMILIES):
         if send_mail(ADDRESS, None, 'smtp.gmail.com', '587') == 0:
             time.sleep(1)
             check_inbox(imap)
+    
+    print('')
+    print(colored('Results stored in:','white', attrs=['underline', 'bold']) + '' +
+    str(settings.DIRECTORY_PATH) + '/docs/email.json')
+    print('')
 
 def askService():
     print('')

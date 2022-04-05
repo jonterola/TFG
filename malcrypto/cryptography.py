@@ -1,12 +1,21 @@
-import pathlib
+import pathlib, settings
 from cryptography.fernet import Fernet
 
-DIRECTORY_PATH = pathlib.Path().resolve()
+
 
 ##Encriptar muestra malware
 def encrypt(malwareContent):
-    keyPath = str(DIRECTORY_PATH) + '/malcrypto/clave.key'
+    keyPath = str(settings.DIRECTORY_PATH) + '/malcrypto/clave.key'
     with open(keyPath, 'rb') as key:
         clave = key.read()
     f = Fernet(clave)
     return f.encrypt(malwareContent)
+
+
+##Desencriptar muestra malware
+def decrypt(encryptedContent):
+    keyPath = str(settings.DIRECTORY_PATH) + '/malcrypto/clave.key'
+    with open(keyPath, 'rb') as key:
+        clave = key.read()
+    f = Fernet(clave)
+    return f.decrypt(encryptedContent)
