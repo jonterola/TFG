@@ -1,9 +1,10 @@
-import pathlib
-import settings
-import pyzipper
+import pathlib, settings, pyzipper
 from attacks import crawler
 from malcrypto import cryptography
 from termcolor import colored
+from time import sleep
+from tqdm import tqdm
+
 
 
 
@@ -13,10 +14,19 @@ def analyze(firstTime, COMMON_MALWARE_FAMILIES):
         for malware in COMMON_MALWARE_FAMILIES:
             crawler.getMalware(malware)
     
-    extractFiles()
+    #extractFiles()
+    
+    #Wait 3 minutes before cheching if the files have been removed.
+    print('')
+    print('Wait 3 minutes before checking if files have been removed...')
+    print('')
+
+    for i in tqdm(range(18000)):
+       sleep(0.01)
 
 
 
+##TODO: EXTRAER EN CARPETAS DIFERENTES EN FUNCION DE LA FAMILIA DE MALWARE
 
 def extractFiles():
     print('')
