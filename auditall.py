@@ -26,9 +26,10 @@ run_options = {
 
 ##Eliminar muestras de malware descargadas
 def clear():
-    malwareDirectoryPath = str(pathlib.Path().resolve()) + '/malsamples/'
+    malwareDirectoryPath = str(settings.DIRECTORY_PATH) + '/malsamples/'
     shutil.rmtree(malwareDirectoryPath)
-
+    if os.exists(str(settings.DIRECTORY_PATH)+ '/attacks/endpoint/malware/'):
+        shutil.rmtree(str(settings.DIRECTORY_PATH)+ '/attacks/endpoint/malware/')
 ##Depuracion de los argumentos del comando
 
 try:
@@ -77,7 +78,7 @@ for current_argument, current_value in arguments:
 
 ##Si firstTime = True  ==> es necesario recopilar malware de la BD
 ##             = False ==> no hacer llamadas a la BD 
-firstTime = False
+firstTime = True
 
 settings.init()
 
@@ -149,6 +150,13 @@ if(run_options["endpoint"] == True):
     print('')
     print('')
     print('')
+
+    #Creación de la carpeta malware
+    endpointMalwarePath = str(settings.DIRECTORY_PATH)+ '/attacks/endpoint/malware/'
+    if os.path.exists(endpointMalwarePath):
+        shutil.rmtree(endpointMalwarePath)
+    os.mkdir(endpointMalwarePath)
+
     endpoint.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
     firstTime = False
 

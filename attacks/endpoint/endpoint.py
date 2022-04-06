@@ -12,8 +12,8 @@ def analyze(firstTime, COMMON_MALWARE_FAMILIES):
     if firstTime == True:
         for malware in COMMON_MALWARE_FAMILIES:
             crawler.getMalware(malware)
-    else:
-        print('TODO: Analizar')
+    
+    extractFiles()
 
 
 
@@ -34,11 +34,15 @@ def extractFiles():
 
             with pyzipper.AESZipFile(str(settings.DIRECTORY_PATH) + '/malsamples/' + family + '/' + malsample + '.zip') as f:
                 f.pwd = b'infected'
-                f.read(str(settings.DIRECTORY_PATH) + '/attacks/endpoint/malware/' + 
-                malsample + '.' + settings.MALWAREDICT[family][malsample][0])
+                malware = f.read(malsample + '.' + settings.MALWAREDICT[family][malsample][0])
 
+            with open(str(settings.DIRECTORY_PATH) + '/attacks/endpoint/malware/' + 
+                malsample + '.' + settings.MALWAREDICT[family][malsample][0],'wb') as f:
+                f.write(malware)
 
-
+    print('')
+    print(colored('FILES UNZIPPED!','green',attrs=['bold']))
+    print('')   
 
 
 

@@ -1,6 +1,6 @@
 import smtplib, imaplib, email, time, re, sys, settings
 
-from attr import attrs
+#from attr import attrs
 from os.path import basename
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
