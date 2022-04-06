@@ -5,7 +5,7 @@ from attacks import crawler
 from malcrypto import cryptography
 from termcolor import colored
 
-DIRECTORY_PATH = pathlib.Path().resolve()
+
 
 def analyze(firstTime, COMMON_MALWARE_FAMILIES):
 

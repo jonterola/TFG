@@ -78,7 +78,8 @@ for current_argument, current_value in arguments:
 
 ##Si firstTime = True  ==> es necesario recopilar malware de la BD
 ##             = False ==> no hacer llamadas a la BD 
-firstTime = True
+firstTime = False
+
 
 settings.init()
 
@@ -124,7 +125,6 @@ if(run_options["navigation"] == True):
     print('')
     print('')
     in_navigation.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
-    firstTime = False
 
 
 #### NAVEGACION SALIENTE

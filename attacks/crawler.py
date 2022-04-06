@@ -13,7 +13,7 @@ API_KEY = "9e24bc6c5347c236c79b8d25a8ddc1a9"
 #Obtener mediante consultas a la BD muestras de malware que formen parte de una familia de malware determinada
 def getMalware(malwareFamily):
 
-    print("Crawling malware: " + malwareFamily.upper())
+    print("Collecting malware: " + malwareFamily.upper())
     print('')
 
 
@@ -34,11 +34,9 @@ def getMalware(malwareFamily):
                 #   0 : FILE TYPE
                 #   1 : ENDPOINT RESULT ==> False = Blocked , True = Vulnerable
                 #   2 : EMAIL RESULT ==> None = Blocked , Inbox = Message arrived to Inbox, Spam = Message arrived to Spam
-                #   3 : IN NAVIGATION RESULT ==> False = Blocked, True = Vulnerable
-                #   4 : OUT NAVIGATION RESULT ==> False = Blocked, True = Vulnerable
-            malwareInfo[mal['sha256_hash']] = [mal['file_type'], False, 'None', False, False]
+            malwareInfo[mal['sha256_hash']] = [mal['file_type'], False, 'None']
 
-        print(str(len(malwareInfo)) + ' muestras encontradas.')
+        print(str(len(malwareInfo)) + ' samples found.')
         settings.MALWAREDICT[malwareFamily] = malwareInfo
 
         getMalwareSamples(malwareInfo, malwareFamily)
@@ -46,32 +44,44 @@ def getMalware(malwareFamily):
     
 
 #Obtener lista de URLs e IPs maliciosas
-##HAY QUE CAMBIAR TODO, HAY QUE USAR URLHAUS
 def getMalwareURLs(malwareFamily):
-    print("Crawling malware: " + malwareFamily.upper())
     print('')
+    print("Collecting malicious URLs: " + malwareFamily.upper())
 
 
-    data = {'query': 'malwareinfo', 'malware': malwareFamily, 'limit': 50}
-    url = "https://threatfox-api.abuse.ch/api/v1/"
-    response = requests.post(url, data=json.dumps(data)).json()
+    data = {'signature': malwareFamily}
+    url = "https://urlhaus-api.abuse.ch/v1/signature/"
+    response = requests.post(url, data=data).json()
 
     if response['query_status'] != 'ok' :
         print('No sample found.')
 
     else:
-        data = response['data']
-        malwareInfo = []
+        data = response['urls']
+        urlInfo = {}
 
-        for mal in data:
-            if mal['ioc_type'] == 'ip:port' or mal['ioc_type'] == 'url':                    
-                malwareInfo.append([mal['ioc'], mal['ioc_type_desc']])
+        #Se escogen las primeras 50 URLs de la consulta
+        for mal in data[:50]:
+            if mal['url_status'] == 'online':
+                if str(mal['url']).startswith('http:'):
+                    protocol = 'http'
+                    domain = str(mal['url']).removeprefix('http://').split('/', 1)[0]
+                else:
+                    protocol = 'https'
+                    domain = str(mal['url']).removeprefix('https://').split('/', 1)[0]
 
-        
-        if(len(malwareInfo) == 0):
+                ##URL INFO STRUCT:
+                #   0 : DOMINIO/MAQUINA
+                #   1 : PROTOCOLO
+                #   2 : IN NAVIGATION RESULT ==> False = Blocked , True = Vulnerable
+                #   3 : OUT NAVIGATION RESULT ==> None = Blocked , True = Vulnerable
+                urlInfo[mal['url']] = [domain, protocol, False, False]
+
+        settings.URLDICT[malwareFamily] = urlInfo
+        if(len(urlInfo) == 0):
             print('No sample found.')
         else:
-            print(str(len(malwareInfo)) + ' samples found.')
+            print(str(len(urlInfo)) + ' samples found.')
         
         
 
@@ -79,7 +89,7 @@ def getMalwareURLs(malwareFamily):
 #Descargar las muestras de malware que coincidan con los hashes sha-256
 def getMalwareSamples(malwareInfo, malwareFamily):
     print('')
-    print("Descargando muestras...")
+    print("Downloading samples...")
     print('')
 
     samplePath = str(settings.DIRECTORY_PATH) + "/malsamples/" + malwareFamily + "/"
@@ -93,14 +103,15 @@ def getMalwareSamples(malwareInfo, malwareFamily):
             malfile = requests.post(url, data=data)
 
         except:
-            print("Algo no ha ido como se esperaba... :(")
+            print("Something went wrong... :(")
     
         encryptedMalware =  cryptography.encrypt(malfile.content)
 
         with open(samplePath + mal +".zip", "wb") as f:
             f.write(encryptedMalware)
-    print('Malware recopilado con exito!')
+    print('Malware successfully collected!')
     print('')
     print('')
+
 
 
