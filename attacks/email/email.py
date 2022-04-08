@@ -1,4 +1,4 @@
-import smtplib, imaplib, email, time, re, sys, settings
+import smtplib, imaplib, email, time, re, sys, settings, json
 
 #from attr import attrs
 from os.path import basename
@@ -27,7 +27,7 @@ def analyze(firstTime, COMMON_MALWARE_FAMILIES):
     if firstTime == True:
         for malware in COMMON_MALWARE_FAMILIES:
             crawler.getMalware(malware)
-
+            
     if(not re.match("^\w+(\.?\w+)?@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$",ADDRESS)):
         sys.exit("Email ADDRESS value must have the following FORMAT: \'XXXX@YYYY.ZZZ\'")
 
@@ -86,14 +86,17 @@ def analyze(firstTime, COMMON_MALWARE_FAMILIES):
     for fam in COMMON_MALWARE_FAMILIES:
         ##PRUEBAS. HAY QUE CAMBIAR A SAMPLES DE VERDAD
         print('')
-        print(colored(str(fam).upper() + ':','white',attrs=['underline']))
+        print(colored(str(fam).upper() + ':','white',attrs=['underline','bold']))
         print('')
-        if send_mail(ADDRESS, None, 'smtp.gmail.com', '587') == 0:
-            time.sleep(1)
-            check_inbox(imap)
+        # for mal in settings.MALWAREDICT[fam]:
+        #     if send_mail(fam, mal, 'smtp.gmail.com', '587') == 0:
+        #         time.sleep(1)
+        #         check_inbox(imap)
     
+    dict2json()
+
     print('')
-    print(colored('Results stored in:','white', attrs=['underline', 'bold']) + '' +
+    print(colored('Results stored in: ','white', attrs=['underline', 'bold']) + '' +
     str(settings.DIRECTORY_PATH) + '/docs/email.json')
     print('')
 
@@ -113,7 +116,7 @@ def askService():
     askService()
 
 
-def send_mail(send_to, files, host, port):
+def send_mail(family, hash, host, port):
     status = 0
 
     s = smtplib.SMTP(host=host, port=port)
@@ -123,11 +126,19 @@ def send_mail(send_to, files, host, port):
     msg = MIMEMultipart()
     msg['From'] = settings.SENDER['mail']
     msg['To'] = ADDRESS
-    msg['Subject'] = "HASH | TIPO"
+    msg['Subject'] = "HASH: " + hash + " | TIPO: " + settings.MALWAREDICT[family][hash][0]
 
-    msg.attach(MIMEText('ESTO ES UN TEXTO DE PRUEBA, NO ME MANDES A SPAM POR FAVOR.'))
+    msg.attach(MIMEText('''
+    Hello,
+    
+    This message has been sent by AuditAll, a tool designed for analyzing the security level of an email account.
 
-    file = str(settings.DIRECTORY_PATH) + '/hola.exe'
+    There is a malware sample attached to this email so please, DON'T DOWNLOAD IT!!
+
+    AuditAll
+    '''))
+
+    file = str(settings.DIRECTORY_PATH) + '/hola.doc'
     with open(file, "rb") as fil:
         part = MIMEApplication(
             fil.read(),
@@ -155,7 +166,7 @@ def check_inbox(imap):
             msg = email.message_from_bytes(response_part[1])
             if str(msg['subject']).startswith('HASH'):
                 print(colored('[X] Message with HASH : asdfasdfasfa and DOCTYPE : EXE has arrived to INBOX.','red',attrs=['bold']))
-                return 'Inbox'
+                return 'inbox'
 
     ##GET LAST EMAIL IN SPAM
     spam = imap.select('SPAM', readonly=True)
@@ -166,10 +177,53 @@ def check_inbox(imap):
             msg = email.message_from_bytes(response_part[1])
             if str(msg['subject']).startswith('HASH'):
                 print(colored('[*] Message with HASH : asdfasdfasfa and DOCTYPE : EXE has arrived to SPAM.','yellow', attrs=['bold']))
-                return 'Spam'
+                return 'spam'
 
     print('[\u2713] Message with HASH : asdfasdfasfa and DOCTYPE : EXE has been blocked.')
     return 'None'
     
+
+##Generar json a partir de la informacion recopilada durante la ejecucion 
+def dict2json():
+    dictionary = settings.MALWAREDICT
+    jsonPath = str(settings.DIRECTORY_PATH) + '/docs/email.json'
+    with open(jsonPath, 'w') as f:
+        f.write('''{
+                "malware" : [
+                        {
+                            ''')
+
+    ##Flatten de todas las familias de malware
+    malList = []
+    for fam in settings.COMMON_MALWARE_FAMILIES:
+        for mal in dictionary[fam]:
+            dictionary[fam][mal].append(fam)
+            dictionary[fam][mal].append(mal)
+            malware = dictionary[fam][mal]
+            malList.append(malware)
+
+
+    ##Formato para todos los elementos menos el ultimo
+    for mal in malList[:-1]:
+            jsonString = '''"hash": "{0}",
+                            "filetype": "{1}",
+                            "malfamily": "{2}",
+                            "emailstatus": "{3}"
+                        }},
+                        {{
+                            '''  
+            
+            with open(jsonPath, 'a') as f:
+                f.write(jsonString.format(mal[4],mal[0],mal[3],mal[2]))
         
-        
+    ##Ultimo elemento
+    jsonString = '''"hash": "{0}",
+                    "filetype": "{1}",
+                    "malfamily": "{2}",
+                    "emailstatus": "{3}"
+                }}
+            ]
+        }}'''
+    
+    with open(jsonPath, 'a') as f:
+        f.write(jsonString.format(malList[-1][4], malList[-1][0], malList[-1][3], malList[-1][2]))   

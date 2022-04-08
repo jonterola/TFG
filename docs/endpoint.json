@@ -1,0 +1,304 @@
+{
+                "malware" : [
+                        {
+                                "hash": "fc93c09e04bd854bec8bb6ea7aa25d85dedce7169969425b839c0b50b5c81391",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "f7779a14508badabcfe75ebaf3c49c2a626b72bb23d5d1eea1183178be4b8bb2",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "4172a578d9a3c2a8299645941adfba32e647d4bb2269d692a047afdf1bb20349",
+                            "filetype": "rar",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "bef5ff1d141f1643d56aa91d6bc72f7178c70559ecdc42d218d848ce0b7d6fee",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "e2bba2a7a0c730b5019eee8169ce2736ecf16c678367b8caf6cea0d388c6efac",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "f0b87fe1625980ab56978ef9ae03e8f099f341f722d490d95170dd19b82f3a8b",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "d52eb566811fa01a60ee2f6635cd7909f782cae198e200a509aa0875b4fedbb9",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "4d9235e12f4e970821baacaf3e4b441847c232233cdcdf228dffd99c9d6fbc84",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "6d8fe8e4b99da6d816d7335bd1ace36db4706fda0e1e46dceb5657ca1a57d81c",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "dbab583c459334056ee08d7c26d05772489b4426c550bf8092fa40ccd69f5546",
+                            "filetype": "xlsx",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "6122dce9933f03479b3d98aea0785ae26737644262ac9ee8a67cbfbf11050f13",
+                            "filetype": "xls",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "3992620649e55f12d81733c1002250472a89ab004888c8224b52daa138cf6de6",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "a93e4097c038f621bda80edc073c6d58f7026e3d7aee6da680d75f90ad60266a",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "a4169a9c2fe2e61f9665427eb4a4280cbefe606d59575f9fcd0f591946d460c7",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "53e254f14aee1f88fb200f7666e91555f691ffe90191e6e7995c56ef7ad964c5",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "4ea32ccd68ea4437adbb5639bbbd2a0098107f16b851ac463a136ec5ecba796a",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "e027bfea7ecefa82d25647a8c4b864f70e60f4ddb7fc26a7416d6aec7c956b55",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "16432f48a9728b59c9984c0937ac3a499db93437a56085acd101eee1889258a6",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "9cc1fc806af69d55757ca835bcf77b31f0b9bc3e7a05fe3044ec5826a0004fa0",
+                            "filetype": "xlsx",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "8b95e4aa5f5c9f947786d102eed8bae40cb2f5548cd2d8824dcb474e5c8efd38",
+                            "filetype": "xlsx",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "78ffe578b4b223f8c66428c3480750970bf7d946802dee83fe7dd2306cb9af7a",
+                            "filetype": "xlsx",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "f37a0441c66222c49723f8feae71cdce91423549228a852fb24a99fcb80c5e41",
+                            "filetype": "xls",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "90268236739f539c8793fbfe8ef1461e046667dc508fd1e1aac379b91d5c7f3a",
+                            "filetype": "zip",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "006b52c40303096ed01d0fa0bff171039be947b6e5ce1fdddabcef73eb258f07",
+                            "filetype": "rar",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "a893ba5218f2456a154c43c363d391a3117638c8f300cac0b44ec74c4a56be8c",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "4544e6c598775041d584eeaa5065951b466685c38ce816688592f0b229b05f03",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "887a114b32ed103dec2e86cce372b8925f0b3e81ed9ddf5b8895558c10a50f91",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "21077f369ccd19fbf739041db17e30c1b47f972660355647a4e9be341939d6a8",
+                            "filetype": "rar",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "e72916e74e18d79c2ddbd591ba7dd7e5f45bf33cd89d2dcc64361dffc47a875f",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "920665ecf1ff581810753673821a3d3cfe30e6ad804eed82338dd98bac02c788",
+                            "filetype": "r09",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "1cf6514f9eebf3a0175f3fad8812d7787dde73ada6970a669d5837c95c20767d",
+                            "filetype": "img",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "a5bce5b0b2f65be25a27f3f766c924958f90908a8cc729721ab5218614d439b1",
+                            "filetype": "zip",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "cdd2e0e8fad9159baa3a80c6ce55fff1e5cfe06b965f0201388c828b3a4161a7",
+                            "filetype": "zip",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "6921b146f1f6db849955a9f939830a56df182511341da233f288b959b5e0fd53",
+                            "filetype": "rar",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "a938a9f8034c39b4144ba25007be3e25faa05c1794bf75fc1adb72066a7f771f",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "333cf07ff7339bde60d05e3447815ea782af2a1cda0a5989820d9784b780ab1c",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "9b87c490c10ce65fa2ae4a0ae703d794f44dd6177de1b770db5a33e3cb99695e",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "5de6fb501692a54fa9eb3fadca1872d846c42e22d1f84da4ee05fa2be5d6165b",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "71e4c1a52d077ee6310974e2f20a190b261fa52e4e42742fa09a2455b6fa0df8",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "9525881a38a8cb537dad36c13ce617f81bd864678c3b59e4db2b713704c111b9",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "b761751a14cb304e70b956432cefbb3ee8044fbe0c17c2a0d31a095d0d22335a",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "ca8e0f1b03c67459180264fb900b072ba3b20767551266875fc9e98c589bd893",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "dc0eb101b5620d38bdf566e5519043bf1b1e86a66073031a0ac6f9c7129d730f",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "7c4ab0aa144e3ef1b2bc52988952a3abeb251c6cf27c85c446d79b475180097f",
+                            "filetype": "rar",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "4deaa6367791140dfa8dd4600b15a85442c7a0190b808f6bbf58e0af850399f6",
+                            "filetype": "7z",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "3d3e87fb687769f8caa231c7e4e2f10c73ed7ffe2c4cd7470b0b661ae49caf3a",
+                            "filetype": "zip",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "3bf15d5b8ab7b88887aa29649773482b57ccb34097bb4df35b46081127b47e74",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "7eaac8c2cc271306c2f845a168673739248002cc1fd28e310ad639545c35ee81",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "a67942887801f7741aa0d4ef06d319f11afcde678af28d9711cbe0d5b56f46a3",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "12aeb7008ac969d3fa71cd68a9280ce4a2684599e61e0b5c321627e924848bf8",
+                    "filetype": "exe",
+                    "malfamily": "AgentTesla",
+                    "endpointstatus": "blocked"
+                }
+            ]
+        }

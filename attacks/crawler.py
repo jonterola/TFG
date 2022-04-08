@@ -33,13 +33,13 @@ def getMalware(malwareFamily):
             ##MALWARE INFO STRUCT:
                 #   0 : FILE TYPE
                 #   1 : ENDPOINT RESULT ==> False = Blocked , True = Vulnerable
-                #   2 : EMAIL RESULT ==> None = Blocked , Inbox = Message arrived to Inbox, Spam = Message arrived to Spam
-            malwareInfo[mal['sha256_hash']] = [mal['file_type'], False, 'None']
+                #   2 : EMAIL RESULT ==> blocked = Blocked , inbox = Message arrived to Inbox, spam = Message arrived to Spam
+            malwareInfo[mal['sha256_hash']] = [mal['file_type'], False, 'blocked']
 
         print(str(len(malwareInfo)) + ' samples found.')
         settings.MALWAREDICT[malwareFamily] = malwareInfo
 
-        getMalwareSamples(malwareInfo, malwareFamily)
+        #getMalwareSamples(malwareInfo, malwareFamily)
 
     
 
