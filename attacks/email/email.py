@@ -11,12 +11,12 @@ from attacks import crawler
 from termcolor import colored
 
 
-#import win32com.client
+
 
 ##EMAIL##
 
 ## Address. Example: hello@gmail.com
-ADDRESS = "pruebas.auditall@gmail.com"
+ADDRESS = "pruebas.auditall@gmaill.com"
 ## Password.
 PASSWORD = "EwX6kBYBPxkTtAR"
 
@@ -82,6 +82,7 @@ def analyze(firstTime, COMMON_MALWARE_FAMILIES):
         print('')
         print('Login for the user ' + ADDRESS + ' was denied. Please check your credentials.')
         print('')
+        return
 
     for fam in COMMON_MALWARE_FAMILIES:
         ##PRUEBAS. HAY QUE CAMBIAR A SAMPLES DE VERDAD

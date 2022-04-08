@@ -1,7 +1,13 @@
 {
                 "malware" : [
                         {
-                                "hash": "fc93c09e04bd854bec8bb6ea7aa25d85dedce7169969425b839c0b50b5c81391",
+                                "hash": "c4870350597d2092b5c4c7073cd4538734693a18833ff3e1c8325f19363bd96f",
+                            "filetype": "exe",
+                            "malfamily": "AgentTesla",
+                            "endpointstatus": "blocked"
+                        },
+                        {
+                            "hash": "fc93c09e04bd854bec8bb6ea7aa25d85dedce7169969425b839c0b50b5c81391",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "endpointstatus": "blocked"
@@ -290,12 +296,6 @@
                         },
                         {
                             "hash": "a67942887801f7741aa0d4ef06d319f11afcde678af28d9711cbe0d5b56f46a3",
-                            "filetype": "exe",
-                            "malfamily": "AgentTesla",
-                            "endpointstatus": "blocked"
-                        },
-                        {
-                            "hash": "12aeb7008ac969d3fa71cd68a9280ce4a2684599e61e0b5c321627e924848bf8",
                     "filetype": "exe",
                     "malfamily": "AgentTesla",
                     "endpointstatus": "blocked"

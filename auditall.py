@@ -111,6 +111,7 @@ if(run_options["email"] == True):
     print('')
     email.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
     firstTime = False
+    
 ##VECTOR DE ATAQUE: NAVEGACION
 if(run_options["navigation"] == True):
 

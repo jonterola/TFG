@@ -26,4 +26,10 @@ def analyze(COMMON_MALWARE_FAMILIES):
                 print('')
                 print(colored('[X] DOMAIN/IP : ' + settings.URLDICT[fam][url][0] + ' hasnt been blocked.','red',attrs=['bold']))
                 print('')
- 
+
+    dict2json()
+
+
+
+def dict2json():
+    print('TODO')
