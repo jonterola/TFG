@@ -1,4 +1,4 @@
-import smtplib, imaplib, email, time, re, sys, settings, json
+import smtplib, imaplib, email, time, re, sys, settings, json, pyzipper
 
 #from attr import attrs
 from os.path import basename
@@ -6,7 +6,7 @@ from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import COMMASPACE, formatdate
-
+from malcrypto import cryptography
 from attacks import crawler
 from termcolor import colored
 
@@ -16,7 +16,7 @@ from termcolor import colored
 ##EMAIL##
 
 ## Address. Example: hello@gmail.com
-ADDRESS = "pruebas.auditall@gmaill.com"
+ADDRESS = "pruebas.auditall@gmail.com"
 ## Password.
 PASSWORD = "EwX6kBYBPxkTtAR"
 
@@ -85,15 +85,19 @@ def analyze(firstTime, COMMON_MALWARE_FAMILIES):
         return
 
     for fam in COMMON_MALWARE_FAMILIES:
-        ##PRUEBAS. HAY QUE CAMBIAR A SAMPLES DE VERDAD
         print('')
         print(colored(str(fam).upper() + ':','white',attrs=['underline','bold']))
         print('')
-        # for mal in settings.MALWAREDICT[fam]:
-        #     if send_mail(fam, mal, 'smtp.gmail.com', '587') == 0:
-        #         time.sleep(1)
-        #         check_inbox(imap)
-    
+        for mal in settings.MALWAREDICT[fam]:
+            if send_mail(fam, mal, 'smtp.gmail.com', '587') == 0:
+                time.sleep(1)
+                emailStatus = check_inbox(imap)
+
+                if(emailStatus == 'inbox'):
+                    settings.MALWAREDICT[fam][mal][2] = 'inbox'
+                elif(emailStatus == 'spam'):
+                    settings.MALWAREDICT[fam][mal][2] = 'spam'
+
     dict2json()
 
     print('')
@@ -127,7 +131,7 @@ def send_mail(family, hash, host, port):
     msg = MIMEMultipart()
     msg['From'] = settings.SENDER['mail']
     msg['To'] = ADDRESS
-    msg['Subject'] = "HASH: " + hash + " | TIPO: " + settings.MALWAREDICT[family][hash][0]
+    msg['Subject'] = "HASH: " + hash + " | DOCTYPE: " + settings.MALWAREDICT[family][hash][0]
 
     msg.attach(MIMEText('''
     Hello,
@@ -139,25 +143,26 @@ def send_mail(family, hash, host, port):
     AuditAll
     '''))
 
-    file = str(settings.DIRECTORY_PATH) + '/hola.doc'
-    with open(file, "rb") as fil:
-        part = MIMEApplication(
-            fil.read(),
-            Name=basename(file)
-        )
+    filename = str(hash) + '.' + str(settings.MALWAREDICT[family][hash][0])
+    filecontent = decryptFile(family, hash)
+    
+    part = MIMEApplication(
+        filecontent,
+        Name=filename
+    )
     # After the file is closed
-    part['Content-Disposition'] = 'attachment; filename="%s"' % basename(file)
+    part['Content-Disposition'] = 'attachment; filename="%s"' % filename
     msg.attach(part)
     try:
         s.send_message(msg)
-    except:
-        print(colored('[\u2713] Message with HASH : asdfasdfasfa and DOCTYPE : EXE has been blocked.','green',attrs=['bold']))
+    except Exception as e:
+        print(colored('[\u2713] Message with HASH: ' + str(hash) + ' | DOCTYPE: ' + str(settings.MALWAREDICT[family][hash][0]) + ' has been blocked.','green',attrs=['bold']))
         status = -1
     s.close()
     return status
 
 
-def check_inbox(imap):  
+def check_inbox(imap, malhash):  
     ##GET LAST EMAIL IN INBOX
     inbox = imap.select('INBOX', readonly=True)
     email_num = inbox[1][0].decode('utf-8')
@@ -165,8 +170,8 @@ def check_inbox(imap):
     for response_part in msg_data:
         if isinstance(response_part, tuple):
             msg = email.message_from_bytes(response_part[1])
-            if str(msg['subject']).startswith('HASH'):
-                print(colored('[X] Message with HASH : asdfasdfasfa and DOCTYPE : EXE has arrived to INBOX.','red',attrs=['bold']))
+            if str(msg['subject']).startswith('HASH: ' + str(malhash)):
+                print(colored('[X] Message with ' + str(msg['subject']) + ' has arrived to INBOX.','red',attrs=['bold']))
                 return 'inbox'
 
     ##GET LAST EMAIL IN SPAM
@@ -176,11 +181,11 @@ def check_inbox(imap):
     for response_part in msg_data:
         if isinstance(response_part, tuple):
             msg = email.message_from_bytes(response_part[1])
-            if str(msg['subject']).startswith('HASH'):
-                print(colored('[*] Message with HASH : asdfasdfasfa and DOCTYPE : EXE has arrived to SPAM.','yellow', attrs=['bold']))
+            if str(msg['subject']).startswith('HASH: ' + str(malhash)):
+                print(colored('[*] Message with ' + str(msg['subject']) + ' has arrived to SPAM.','yellow', attrs=['bold']))
                 return 'spam'
 
-    print('[\u2713] Message with HASH : asdfasdfasfa and DOCTYPE : EXE has been blocked.')
+    print('[\u2713] Message with HASH: ' + str(malhash) + ' | DOCTYPE: ' + str(settings.MALWAREDICT[family][hash][0]) + ' has been blocked.')
     return 'None'
     
 
@@ -219,12 +224,28 @@ def dict2json():
         
     ##Ultimo elemento
     jsonString = '''"hash": "{0}",
-                    "filetype": "{1}",
-                    "malfamily": "{2}",
-                    "emailstatus": "{3}"
-                }}
-            ]
-        }}'''
+                            "filetype": "{1}",
+                            "malfamily": "{2}",
+                            "emailstatus": "{3}"
+                        }}
+            ]   
+    }}'''
     
     with open(jsonPath, 'a') as f:
         f.write(jsonString.format(malList[-1][4], malList[-1][0], malList[-1][3], malList[-1][2]))   
+
+
+def decryptFile(family, hash):
+
+    with open(str(settings.DIRECTORY_PATH) + '/malsamples/' + family + '/' + hash + '.zip', 'rb') as f:
+        encryptedMalware = f.read()
+        decryptedMalware = cryptography.decrypt(encryptedMalware)
+
+    with open(str(settings.DIRECTORY_PATH) + '/attacks/email/malware/' + family + '/' + hash + '.zip', 'wb') as f:
+        f.write(decryptedMalware)
+
+    with pyzipper.AESZipFile(str(settings.DIRECTORY_PATH) + '/attacks/email/malware/' + family + '/' + hash + '.zip') as f:
+        f.pwd = b'infected'
+        malware = f.read(hash + '.' + settings.MALWAREDICT[family][hash][0])
+
+    return malware

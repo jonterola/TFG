@@ -1,0 +1,118 @@
+{
+                "malware" : [
+                        {
+                                "url": "http://172.245.142.209/88/vbc.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "http://45.133.174.55/1000/vbc.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "http://107.172.73.140/mum/guy.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "http://172.245.142.209/533/vbc.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "http://192.3.239.64/bp0.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "http://107.172.73.140/aba/gun.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "http://107.172.73.140/imo/don.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "http://198.46.132.168/66/vbc.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "http://198.23.207.11/5600/vbc.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "http://107.173.192.156/dd/loader4.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "http://blueprogress.org/grace.jpg",
+                            "filetype": "jpg",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "blocked"
+                        },
+                        {
+                            "url": "https://blueprogress.org/grace.jpg",
+                            "filetype": "jpg",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "blocked"
+                        },
+                        {
+                            "url": "http://190.123.44.138/stealerblank.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "http://107.172.76.193/pond/fox.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "http://blueprogress.org/stp.jpg",
+                            "filetype": "jpg",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "blocked"
+                        },
+                        {
+                            "url": "http://rbmimport.com/emmk/Sexnamz.exe",
+                            "filetype": "exe",
+                            "incoming_status": "blocked",
+                            "outgoing_status": "blocked"
+                        },
+                        {
+                            "url": "http://172.245.142.209/720/vbc.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "http://198.23.207.11/89767/vbc.exe",
+                            "filetype": "exe",
+                            "incoming_status": "vulnerable",
+                            "outgoing_status": "vulnerable"
+                        },
+                        {
+                            "url": "AgentTesla",
+                    "filetype": "exe",
+                    "incoming_status": "vulnerable",
+                    "outgoing_status": "vulnerable"
+                }
+            ]
+        }

@@ -2,9 +2,9 @@ import settings, requests
 from attacks import crawler
 from termcolor import colored
 
-def analyze(firstTime, COMMON_MALWARE_FAMILIES):
-    for family in COMMON_MALWARE_FAMILIES:
-            crawler.getMalwareURLs(family)
+def analyze():
+    for family in settings.COMMON_MALWARE_FAMILIES:
+        crawler.getMalwareURLs(family)
     
     print('')
     print('Starting the incoming navigation analysis...')
@@ -30,8 +30,5 @@ def analyze(firstTime, COMMON_MALWARE_FAMILIES):
                 print(colored('[X] URL : ' + url + ' hasnt been blocked.','red',attrs=['bold']))
                 print('')
 
-        dict2json()
+        
 
-
-def dict2json():
-    print('TODO')

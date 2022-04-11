@@ -28,8 +28,13 @@ run_options = {
 def clear():
     malwareDirectoryPath = str(settings.DIRECTORY_PATH) + '/malsamples/'
     shutil.rmtree(malwareDirectoryPath)
+
     if os.exists(str(settings.DIRECTORY_PATH)+ '/attacks/endpoint/malware/'):
         shutil.rmtree(str(settings.DIRECTORY_PATH)+ '/attacks/endpoint/malware/')
+
+    if os.exists(str(settings.DIRECTORY_PATH)+ '/attacks/email/malware/'):
+        shutil.rmtree(str(settings.DIRECTORY_PATH)+ '/attacks/email/malware/')
+        
 ##Depuracion de los argumentos del comando
 
 try:
@@ -109,6 +114,16 @@ if(run_options["email"] == True):
     print('')
     print('')
     print('')
+
+    #Creación de la carpeta malware
+    emailMalwarePath = str(settings.DIRECTORY_PATH)+ '/attacks/email/malware/'
+    if os.path.exists(emailMalwarePath):
+        shutil.rmtree(emailMalwarePath)
+    os.mkdir(emailMalwarePath)
+
+    for fam in settings.COMMON_MALWARE_FAMILIES :
+        os.mkdir(emailMalwarePath + str(fam)+ '/')
+
     email.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
     firstTime = False
     
@@ -125,7 +140,7 @@ if(run_options["navigation"] == True):
     print('')
     print('')
     print('')
-    in_navigation.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
+    in_navigation.analyze()
 
 
 #### NAVEGACION SALIENTE
@@ -138,7 +153,7 @@ if(run_options["navigation"] == True):
     print('')
     print('')
     print('')
-    out_navigation.analyze(settings.COMMON_MALWARE_FAMILIES)
+    out_navigation.analyze()
 
 ##VECTOR DE ATAQUE: ENDPOINT
 if(run_options["endpoint"] == True):
@@ -158,11 +173,14 @@ if(run_options["endpoint"] == True):
         shutil.rmtree(endpointMalwarePath)
     os.mkdir(endpointMalwarePath)
 
+    for fam in settings.COMMON_MALWARE_FAMILIES :
+        os.mkdir(endpointMalwarePath + str(fam)+ '/')
+
     endpoint.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
     firstTime = False
 
 
-##clear()
+clear()
 
 
 

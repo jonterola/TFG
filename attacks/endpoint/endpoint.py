@@ -1,4 +1,4 @@
-import pathlib, settings, pyzipper
+import pathlib, settings, pyzipper, os
 from attacks import crawler
 from malcrypto import cryptography
 from termcolor import colored
@@ -14,17 +14,19 @@ def analyze(firstTime, COMMON_MALWARE_FAMILIES):
         for malware in COMMON_MALWARE_FAMILIES:
             crawler.getMalware(malware)
     
-    #extractFiles()
+    extractFiles()
     
     #Wait 3 minutes before cheching if the files have been removed.
     print('')
     print('Wait 3 minutes before checking if files have been removed...')
     print('')
 
-    # for i in tqdm(range(18000)):
-    #    sleep(0.01)
+    for i in tqdm(range(18000)):
+       sleep(0.01)
 
     ##TODO: COMPROBAR QUE ARCHIVOS SE HAN BORRADO
+
+    checkBlocked()
 
     dict2json()
 
@@ -34,7 +36,7 @@ def analyze(firstTime, COMMON_MALWARE_FAMILIES):
     print('')
 
 
-##TODO: EXTRAER EN CARPETAS DIFERENTES EN FUNCION DE LA FAMILIA DE MALWARE
+##EXTRAER EN CARPETAS DIFERENTES EN FUNCION DE LA FAMILIA DE MALWARE
 def extractFiles():
     print('')
     print('UNZIPPING FILES INTO: ' + str(settings.DIRECTORY_PATH) + '/attacks/endpoint/malware/')
@@ -49,16 +51,16 @@ def extractFiles():
                 decryptedMalware = cryptography.decrypt(encryptedMalware)
 
             #SOBREESCRIBIR EL MALWARE CON SU CONTENIDO DESENCRIPTADO
-            with open(str(settings.DIRECTORY_PATH) + '/malsamples/' + family + '/' + malsample + '.zip', 'wb') as f:
+            with open(str(settings.DIRECTORY_PATH) + '/attacks/endpoint/malware/' + family + '/' + malsample + '.zip', 'wb') as f:
                 f.write(decryptedMalware)
 
             #OBTENER EL MALWARE DESCOMPRIMIDO
-            with pyzipper.AESZipFile(str(settings.DIRECTORY_PATH) + '/malsamples/' + family + '/' + malsample + '.zip') as f:
+            with pyzipper.AESZipFile(str(settings.DIRECTORY_PATH) + '/attacks/endpoint/malware/' + family + '/' + malsample + '.zip') as f:
                 f.pwd = b'infected'
                 malware = f.read(malsample + '.' + settings.MALWAREDICT[family][malsample][0])
 
             #ESCRIBIR EL MALWARE DESCOMPRIMIDO EN LA CARPETA /attacks/endpoint/malware/
-            with open(str(settings.DIRECTORY_PATH) + '/attacks/endpoint/malware/' + 
+            with open(str(settings.DIRECTORY_PATH) + '/attacks/endpoint/malware/' + family + '/' +
                 malsample + '.' + settings.MALWAREDICT[family][malsample][0],'wb') as f:
                 f.write(malware)
 
@@ -120,3 +122,24 @@ def dict2json():
 
     with open(jsonPath, 'a') as f:
         f.write(jsonString.format(malList[-1][4], malList[-1][0], malList[-1][3], status))
+
+
+def checkBlocked():
+
+    print('')
+    print('Checking deleted malware samples...')
+    print('')
+
+    for fam in settings.COMMON_MALWARE_FAMILIES:
+        for mal in settings.MALWAREDICT[fam]:
+            if(os.path.exists(str(settings.DIRECTORY_PATH) + '/attacks/endpoint/malware/' 
+            + str(fam) + '/' +str(mal) + '.' + str(settings.MALWAREDICT[fam][mal][0]))):
+                print('')
+                print(colored('[X] Malware with HASH: ' + mal + ' | DOCTYPE: ' + str(settings.MALWAREDICT[fam][mal][0]) + ' NOT deleted.','red',attrs=['bold']))
+                print('')
+
+                settings.MALWAREDICT[fam][mal][1] = True
+            else:
+                print('')
+                print(colored('[\u2713] Malware with HASH: ' + mal + ' | DOCTYPE: ' + str(settings.MALWAREDICT[fam][mal][0]) + ' has been deleted.','green',attrs=['bold']))
+                print('')

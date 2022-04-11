@@ -17,7 +17,7 @@ def getMalware(malwareFamily):
     print('')
 
 
-    data = {'query': 'get_siginfo', 'signature': malwareFamily, 'limit': 50}
+    data = {'query': 'get_siginfo', 'signature': malwareFamily, 'limit': 10}
     url = "https://mb-api.abuse.ch/api/v1/"
     response = requests.post(url, data=data).json()
     
@@ -39,7 +39,7 @@ def getMalware(malwareFamily):
         print(str(len(malwareInfo)) + ' samples found.')
         settings.MALWAREDICT[malwareFamily] = malwareInfo
 
-        #getMalwareSamples(malwareInfo, malwareFamily)
+        getMalwareSamples(malwareInfo, malwareFamily)
 
     
 
