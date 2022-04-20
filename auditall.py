@@ -29,10 +29,10 @@ def clear():
     malwareDirectoryPath = str(settings.DIRECTORY_PATH) + '/malsamples/'
     shutil.rmtree(malwareDirectoryPath)
 
-    if os.exists(str(settings.DIRECTORY_PATH)+ '/attacks/endpoint/malware/'):
+    if os.path.exists(str(settings.DIRECTORY_PATH)+ '/attacks/endpoint/malware/'):
         shutil.rmtree(str(settings.DIRECTORY_PATH)+ '/attacks/endpoint/malware/')
 
-    if os.exists(str(settings.DIRECTORY_PATH)+ '/attacks/email/malware/'):
+    if os.path.exists(str(settings.DIRECTORY_PATH)+ '/attacks/email/malware/'):
         shutil.rmtree(str(settings.DIRECTORY_PATH)+ '/attacks/email/malware/')
         
 ##Depuracion de los argumentos del comando
