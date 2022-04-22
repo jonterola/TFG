@@ -13,83 +13,59 @@ from termcolor import colored
 
 
 
-##EMAIL##
-
-## Address. Example: hello@gmail.com
-ADDRESS = "pruebas.auditall@gmail.com"
-## Password.
-PASSWORD = "EwX6kBYBPxkTtAR"
 
 
+def getMalware():
+    for malware in settings.COMMON_MALWARE_FAMILIES:
+        crawler.getMalware(malware)
 
-
-def analyze(firstTime, COMMON_MALWARE_FAMILIES):
-    if firstTime == True:
-        for malware in COMMON_MALWARE_FAMILIES:
-            crawler.getMalware(malware)
-            
-    if(not re.match("^\w+(\.?\w+)?@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$",ADDRESS)):
+def getEmailService(address):
+    if(not re.match("^\w+(\.?\w+)?@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$",address)):
         sys.exit("Email ADDRESS value must have the following FORMAT: \'XXXX@YYYY.ZZZ\'")
 
-    host = ''
-    port = ''
-    if ADDRESS.endswith('@gmail.com'):
-        host = 'smtp.gmail.com'
-        port = '587'
+    if address.endswith('@gmail.com'):        
         print('')
         print('GMAIL account detected.')
         print('')
+
+        return 'G'
     
-    elif ADDRESS.endswith('@outlook.com') or ADDRESS.endswith('@hotmail.com'):
-        host = 'smtp-mail.outlook.com'
-        port = '587'
+    elif address.endswith('@outlook.com') or address.endswith('@hotmail.com'):
         print('')
         print('OUTLOOK account detected.')
         print('')
 
-    else:
-        service = askService()
-        if service == 'N':
-            print('')
-            print('Ending EMAIL analysis.')
-            print('')
-            return
-        elif service == 'G':
-            print('')
-            print('Starting GMAIL analysis.')
-            print('')
-            host = 'smtp.gmail.com'
-            port = '587'
-            
-        elif service == 'O':
-            print('')
-            print('Starting OUTLOOK analysis.')
-            print('')
-            host = 'smtp-mail.outlook.com'
-            port = '587'
+        return 'O'
 
+    else:
+        return 'N'
+
+        
+
+def analyze(address, password, host, port):
+    
     if host == 'smtp.gmail.com':
         imap = imaplib.IMAP4_SSL('imap.gmail.com')
     else:
         imap = imaplib.IMAP4_SSL('imap-mail.outlook.com')
 
     try: 
-        imap.login(ADDRESS, PASSWORD)
+        imap.login(address, password)
         print('')
-        print('User ' + ADDRESS + ' logged in successfully.')
+        print('User ' + str(address) + ' logged in successfully.')
         print('')
-    except:
+    except:        
         print('')
-        print('Login for the user ' + ADDRESS + ' was denied. Please check your credentials.')
+        print('Login for the user ' + str(address) + ' was denied. Please check your credentials.')
         print('')
-        return
+        return -1
 
-    for fam in COMMON_MALWARE_FAMILIES:
+    for fam in settings.COMMON_MALWARE_FAMILIES:
         print('')
         print(colored(str(fam).upper() + ':','white',attrs=['underline','bold']))
         print('')
         for mal in settings.MALWAREDICT[fam]:
-            if send_mail(fam, mal, 'smtp.gmail.com', '587') == 0:
+            if send_mail(fam, mal, 'smtp.gmail.com', '587', address) == 0:
                 time.sleep(1)
                 emailStatus = check_inbox(imap)
 
@@ -98,30 +74,12 @@ def analyze(firstTime, COMMON_MALWARE_FAMILIES):
                 elif(emailStatus == 'spam'):
                     settings.MALWAREDICT[fam][mal][2] = 'spam'
 
-    dict2json()
-
-    print('')
-    print(colored('Results stored in: ','white', attrs=['underline', 'bold']) + '' +
-    str(settings.DIRECTORY_PATH) + '/docs/email.json')
-    print('')
-
-def askService():
-    print('')
-    print('Email service not detected. Which service are you using?')
-    print('Gmail [G] / Outlook [O] / None [N]')
-    answer = input()
-
-    if answer.lower() == 'Gmail'.lower() or 'G'.lower() :
-        return 'G'
-    if answer.lower() == 'Outlook'.lower() or 'O'.lower() :
-        return 'O'
-    if answer.lower() == 'None'.lower() or 'N'.lower() :
-        return 'N'
-
-    askService()
+    
 
 
-def send_mail(family, hash, host, port):
+
+
+def send_mail(family, hash, host, port, address):
     status = 0
 
     s = smtplib.SMTP(host=host, port=port)
@@ -130,7 +88,7 @@ def send_mail(family, hash, host, port):
 
     msg = MIMEMultipart()
     msg['From'] = settings.SENDER['mail']
-    msg['To'] = ADDRESS
+    msg['To'] = address
     msg['Subject'] = "HASH: " + hash + " | DOCTYPE: " + settings.MALWAREDICT[family][hash][0]
 
     msg.attach(MIMEText('''
@@ -156,6 +114,7 @@ def send_mail(family, hash, host, port):
     try:
         s.send_message(msg)
     except Exception as e:
+
         print(colored('[\u2713] Message with HASH: ' + str(hash) + ' | DOCTYPE: ' + str(settings.MALWAREDICT[family][hash][0]) + ' has been blocked.','green',attrs=['bold']))
         status = -1
     s.close()

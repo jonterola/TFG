@@ -7,12 +7,11 @@ from tqdm import tqdm
 
 
 
+def getMalware():
+    for malware in settings.COMMON_MALWARE_FAMILIES:
+        crawler.getMalware(malware)
 
-def analyze(firstTime, COMMON_MALWARE_FAMILIES):
-
-    if firstTime == True:
-        for malware in COMMON_MALWARE_FAMILIES:
-            crawler.getMalware(malware)
+def analyze():        
     
     extractFiles()
     
@@ -24,16 +23,10 @@ def analyze(firstTime, COMMON_MALWARE_FAMILIES):
     for i in tqdm(range(18000)):
        sleep(0.01)
 
-    ##TODO: COMPROBAR QUE ARCHIVOS SE HAN BORRADO
 
     checkBlocked()
 
-    dict2json()
-
-    print('')
-    print(colored('Results stored in: ','white', attrs=['underline', 'bold']) + '' +
-    str(settings.DIRECTORY_PATH) + '/docs/endpoint.json')
-    print('')
+   
 
 
 ##EXTRAER EN CARPETAS DIFERENTES EN FUNCION DE LA FAMILIA DE MALWARE

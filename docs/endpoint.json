@@ -1,61 +1,61 @@
 {
                 "malware" : [
                         {
-                                "hash": "d85e895bf99f8c2e2b0d57b9293f25640eb347a6571bfd1b3f3af4b661a3713b",
+                                "hash": "60ad9b79fa3fd8d43aad5145ae7916fe04f55e487864946cad9523eaa8de02dd",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "endpointstatus": "vulnerable"
                         },
                         {
-                            "hash": "e91bfb24215e331a7fac1b10c1b68ccc4096b7324aa5f90720cd1537164c1a10",
+                            "hash": "a9394c83b0d854b8f5de050acb34fa7d06cdb1ecf5f515b2de51425df135d0f2",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "endpointstatus": "vulnerable"
                         },
                         {
-                            "hash": "8cd4c16a13548868b46418bc0cff17da000d0e7a11f64124307d67cc6f3e244c",
+                            "hash": "a8aa7d49c7292086bd38e39a597ab8babf8991fe463fcbba26ff4cbac5473ed6",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "endpointstatus": "vulnerable"
                         },
                         {
-                            "hash": "e798e40961d09ffda6b515693efe47bc271084b85276fc5e5d4395bbdcc21e8a",
+                            "hash": "d493dca078d9747550efd2f30838858ad063f2f702878cdd67e1a84a4ff25020",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "endpointstatus": "vulnerable"
                         },
                         {
-                            "hash": "c68356f8a2c7e81ea78d376eaa45c968f78bc879623395b066b9894c75d4971b",
+                            "hash": "e4bba9c2af86f903aeecbaf44534222faf78b07bdb4c7604e747ecd6898e38e2",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "endpointstatus": "vulnerable"
                         },
                         {
-                            "hash": "ac3e120197091d544f8e462bc2338c88545d511e6d29a680b17b9cbf3469ecff",
+                            "hash": "1d9c52f0726c9514e0051e033ec7259daa42d1876503aa79f6ec37c5de41f2be",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "endpointstatus": "vulnerable"
                         },
                         {
-                            "hash": "acfd5b8146df0edf4efb2e7cf78d22499902893d30d75797cf8083442ca5aa56",
-                            "filetype": "xlsx",
+                            "hash": "cbc1a87cf822070c64227c1f2b2485692bc75a4ba7d0f141e6d25e9f264336c2",
+                            "filetype": "gz",
                             "malfamily": "AgentTesla",
                             "endpointstatus": "vulnerable"
                         },
                         {
-                            "hash": "75ff1de85edf6d704b7627005c78e0034ad8381d4535f1831fdfacf4aa47264a",
-                            "filetype": "exe",
+                            "hash": "0982b1fead8070929f56d0f38888115a22983af4c855c67bddb5372b8631e72f",
+                            "filetype": "zip",
                             "malfamily": "AgentTesla",
                             "endpointstatus": "vulnerable"
                         },
                         {
-                            "hash": "b1ea5df63fbca188a9bf2fde64e465bd7598fe6e8c19e88f49266eb6e88e1dd9",
-                            "filetype": "exe",
+                            "hash": "35fc817e28e7d4490f85e283b947337b7e92485c7eb26f88b139d717ba8d3f73",
+                            "filetype": "zip",
                             "malfamily": "AgentTesla",
                             "endpointstatus": "vulnerable"
                         },
                         {
-                            "hash": "ae70288e74603501f4ba362fe31a8d0892158102b6bc264f606db836d96e4918",
+                            "hash": "c56b29bf89bb20786e552f160cb6495926c71ba441824f585af96c480f0b85ee",
                     "filetype": "exe",
                     "malfamily": "AgentTesla",
                     "endpointstatus": "vulnerable"

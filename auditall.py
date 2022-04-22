@@ -21,8 +21,28 @@ run_options = {
 }
 
 
+##EMAIL##
+
+## Address. Example: hello@gmail.com
+ADDRESS = "pruebas.auditall@gmail.com"
+## Password.
+PASSWORD = "EwX6kBYBPxkTtAR"
 
 
+def askService():
+    print('')
+    print('Email service not detected. Which service are you using?')
+    print('Gmail [G] / Outlook [O] / None [N]')
+    answer = input()
+
+    if answer.lower() == 'Gmail'.lower() or 'G'.lower() :
+        return 'G'
+    if answer.lower() == 'Outlook'.lower() or 'O'.lower() :
+        return 'O'
+    if answer.lower() == 'None'.lower() or 'N'.lower() :
+        return 'N'
+
+    askService()
 
 ##Eliminar muestras de malware descargadas
 def clear():
@@ -103,84 +123,167 @@ print('')
 print('FOLDER WITH MALWARE SAMPLES CREATED ON : ' + malwarePath)
 print('')
 
-##VECTOR DE ATAQUE: EMAIL
-if(run_options["email"] == True):
-    print('')
-    print('')
-    print('')
-    print(colored('###################################################','cyan',attrs=['bold']))
-    print(colored("###################### EMAIL ######################",'cyan',attrs=['bold']))
-    print(colored('###################################################','cyan',attrs=['bold']))
-    print('')
-    print('')
-    print('')
+try:
+    ##VECTOR DE ATAQUE: EMAIL
+    if(run_options["email"] == True):
+        print('')
+        print('')
+        print('')
+        print(colored('###################################################','cyan',attrs=['bold']))
+        print(colored("###################### EMAIL ######################",'cyan',attrs=['bold']))
+        print(colored('###################################################','cyan',attrs=['bold']))
+        print('')
+        print('')
+        print('')
 
-    #Creación de la carpeta malware
-    emailMalwarePath = str(settings.DIRECTORY_PATH)+ '/attacks/email/malware/'
-    if os.path.exists(emailMalwarePath):
-        shutil.rmtree(emailMalwarePath)
-    os.mkdir(emailMalwarePath)
+        #Creación de la carpeta malware
+        emailMalwarePath = str(settings.DIRECTORY_PATH)+ '/attacks/email/malware/'
+        if os.path.exists(emailMalwarePath):
+            shutil.rmtree(emailMalwarePath)
+        os.mkdir(emailMalwarePath)
 
-    for fam in settings.COMMON_MALWARE_FAMILIES :
-        os.mkdir(emailMalwarePath + str(fam)+ '/')
+        for fam in settings.COMMON_MALWARE_FAMILIES :
+            os.mkdir(emailMalwarePath + str(fam)+ '/')
 
-    email.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
-    firstTime = False
-    
-##VECTOR DE ATAQUE: NAVEGACION
-if(run_options["navigation"] == True):
+        ## Recopilar malware en caso de ser necesario
+        if firstTime == True:
+            email.getMalware()
+            firstTime = False
 
-#### NAVEGACION ENTRANTE
-    print('')
-    print('')
-    print('')
-    print(colored('###################################################','cyan',attrs=['bold']))
-    print(colored("############### INCOMING NAVIGATION ###############", 'cyan', attrs=['bold']))
-    print(colored('###################################################','cyan',attrs=['bold']))
-    print('')
-    print('')
-    print('')
-    in_navigation.analyze()
+        ## Obtener servicio de email y configurar HOST y PORT
+        service = email.getEmailService(ADDRESS)
 
+        if service == 'N':
+            service = askService()
 
-#### NAVEGACION SALIENTE
-    print('')
-    print('')
-    print('')
-    print(colored('###################################################','cyan',attrs=['bold']))
-    print(colored("############### OUTGOING NAVIGATION ###############", 'cyan', attrs=['bold']))
-    print(colored('###################################################','cyan',attrs=['bold']))
-    print('')
-    print('')
-    print('')
-    out_navigation.analyze()
+        if service == 'N':
+            print('')
+            print('Ending EMAIL analysis.')
+            print('')
+        else:
+            host = ''
+            port = ''
+            if service == 'G':
+                print('')
+                print('Starting GMAIL analysis.')
+                print('')
+                host = 'smtp.gmail.com'
+                port = '587'
+                            
+            else :
+                print('')
+                print('Starting OUTLOOK analysis.')
+                print('')
+                host = 'smtp-mail.outlook.com'
+                port = '587'
 
-##VECTOR DE ATAQUE: ENDPOINT
-if(run_options["endpoint"] == True):
-    print('')
-    print('')
-    print('')
-    print(colored('###################################################','cyan',attrs=['bold']))
-    print(colored('#################### ENDPOINT #####################','cyan', attrs=['bold']))
-    print(colored('###################################################','cyan', attrs=['bold']))
-    print('')
-    print('')
-    print('')
+            ## Comenzar envío y analisis de emails
+            if(email.analyze(ADDRESS, PASSWORD, host, port) != -1):
 
-    #Creación de la carpeta malware
-    endpointMalwarePath = str(settings.DIRECTORY_PATH)+ '/attacks/endpoint/malware/'
-    if os.path.exists(endpointMalwarePath):
-        shutil.rmtree(endpointMalwarePath)
-    os.mkdir(endpointMalwarePath)
+                ## Generar fichero json a partir de los resultados del analisis
+                email.dict2json()
 
-    for fam in settings.COMMON_MALWARE_FAMILIES :
-        os.mkdir(endpointMalwarePath + str(fam)+ '/')
-
-    endpoint.analyze(firstTime, settings.COMMON_MALWARE_FAMILIES)
-    firstTime = False
+                print('')
+                print(colored('Results stored in: ','white', attrs=['underline', 'bold']) + '' +
+                str(settings.DIRECTORY_PATH) + '/docs/email.json')
+                print('')
+            
+            
 
 
-clear()
+        
+        
+    ##VECTOR DE ATAQUE: NAVEGACION
+    if(run_options["navigation"] == True):
+
+    #### NAVEGACION ENTRANTE
+        print('')
+        print('')
+        print('')
+        print(colored('###################################################','cyan',attrs=['bold']))
+        print(colored("############### INCOMING NAVIGATION ###############", 'cyan', attrs=['bold']))
+        print(colored('###################################################','cyan',attrs=['bold']))
+        print('')
+        print('')
+        print('')
+
+        ## Recopilar URLs e IPs maliciosas
+        in_navigation.getMalwareURLs()
+
+        ## Comenzar analisis de navegacion entrante
+        in_navigation.analyze()
+
+
+    #### NAVEGACION SALIENTE
+        print('')
+        print('')
+        print('')
+        print(colored('###################################################','cyan',attrs=['bold']))
+        print(colored("############### OUTGOING NAVIGATION ###############", 'cyan', attrs=['bold']))
+        print(colored('###################################################','cyan',attrs=['bold']))
+        print('')
+        print('')
+        print('')
+
+        ## Comenzar analisis de navegacion saliente
+        out_navigation.analyze()
+
+        ## Generar fichero json a partir de los resultados de navegacion entrante y saliente
+        out_navigation.dict2json()
+        print('')
+        print(colored('Results stored in: ','white', attrs=['underline', 'bold']) + '' +
+        str(settings.DIRECTORY_PATH) + '/docs/navigation.json')
+        print('')
+
+
+    ##VECTOR DE ATAQUE: ENDPOINT
+    if(run_options["endpoint"] == True):
+        print('')
+        print('')
+        print('')
+        print(colored('###################################################','cyan',attrs=['bold']))
+        print(colored('#################### ENDPOINT #####################','cyan', attrs=['bold']))
+        print(colored('###################################################','cyan', attrs=['bold']))
+        print('')
+        print('')
+        print('')
+
+        #Creación de la carpeta malware
+        endpointMalwarePath = str(settings.DIRECTORY_PATH)+ '/attacks/endpoint/malware/'
+        if os.path.exists(endpointMalwarePath):
+            shutil.rmtree(endpointMalwarePath)
+        os.mkdir(endpointMalwarePath)
+
+        for fam in settings.COMMON_MALWARE_FAMILIES :
+            os.mkdir(endpointMalwarePath + str(fam)+ '/')
+
+        ## Recopilar malware en caso de ser necesario
+        if firstTime == True:
+            endpoint.getMalware()   
+            firstTime = False
+
+
+        endpoint.analyze()
+
+        endpoint.dict2json()
+
+        print('')
+        print(colored('Results stored in: ','white', attrs=['underline', 'bold']) + '' +
+        str(settings.DIRECTORY_PATH) + '/docs/endpoint.json')
+        print('')
+
+
+    clear()
+
+except KeyboardInterrupt:
+    print('')
+    print('KeyboardInterrupt exception')
+    print('Clearing malware...')
+    clear()
+    print('Malware successfully cleared!')
+    print('')
+
+
 
 
 

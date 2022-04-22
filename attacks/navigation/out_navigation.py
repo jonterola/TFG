@@ -27,7 +27,7 @@ def analyze():
                 print(colored('[X] DOMAIN/IP : ' + settings.URLDICT[fam][url][0] + ' hasnt been blocked.','red',attrs=['bold']))
                 print('')
 
-    dict2json()
+   
 
 
 

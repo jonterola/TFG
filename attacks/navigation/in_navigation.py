@@ -2,9 +2,12 @@ import settings, requests
 from attacks import crawler
 from termcolor import colored
 
-def analyze():
+
+def getMalwareURLs():
     for family in settings.COMMON_MALWARE_FAMILIES:
         crawler.getMalwareURLs(family)
+
+def analyze():   
     
     print('')
     print('Starting the incoming navigation analysis...')
