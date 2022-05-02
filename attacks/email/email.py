@@ -1,6 +1,5 @@
-import smtplib, imaplib, email, time, re, sys, settings, json, pyzipper
+import smtplib, imaplib, email, time, re, sys, settings, json, pyzipper, requests
 
-#from attr import attrs
 from os.path import basename
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
@@ -10,7 +9,7 @@ from malcrypto import cryptography
 from attacks import crawler
 from termcolor import colored
 
-
+from Crypto.Cipher import AES
 
 
 
@@ -82,9 +81,13 @@ def analyze(address, password, host, port):
 def send_mail(family, hash, host, port, address):
     status = 0
 
+    aesCode = requests.get("https://auditall.000webhostapp.com/codigo.txt").content
+    
+    aes = AES.new(aesCode, AES.MODE_ECB)
+    pwd = aes.decrypt(settings.SENDER['pass']).decode()
     s = smtplib.SMTP(host=host, port=port)
     s.starttls()
-    s.login(settings.SENDER['mail'], settings.SENDER['pass'])
+    s.login(settings.SENDER['mail'], pwd)
 
     msg = MIMEMultipart()
     msg['From'] = settings.SENDER['mail']

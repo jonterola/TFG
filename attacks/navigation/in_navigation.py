@@ -20,7 +20,7 @@ def analyze():
 
         for url in settings.URLDICT[fam]:
             
-            r = requests.get(url)
+            r = requests.head(url)
 
             if(r.status_code != 200):
                 print('')

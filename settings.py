@@ -29,5 +29,5 @@ def init():
 
     global SENDER
     SENDER = {"mail" : "tfg.auditall@gmail.com",
-              "pass" : "auditingThings22"}
+              "pass" : b'E\xecV\x1b\xfd\xda\x82\xdb_\xba\xde\xe2f\x17\xc6\xfd'}
 
