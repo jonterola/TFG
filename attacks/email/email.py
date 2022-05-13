@@ -13,11 +13,12 @@ from Crypto.Cipher import AES
 
 
 
-
+## Obtener muestras de cada familia de malware
 def getMalware():
     for malware in settings.COMMON_MALWARE_FAMILIES:
         crawler.getMalware(malware)
 
+## Identificar servicio de email a utilizar en funcion del correo electronico utilizado
 def getEmailService(address):
     if(not re.match("^\w+(\.?\w+)?@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$",address)):
         sys.exit("Email ADDRESS value must have the following FORMAT: \'XXXX@YYYY.ZZZ\'")
@@ -42,12 +43,14 @@ def getEmailService(address):
         
 
 def analyze(address, password, host, port):
-    
+
+    ## Configuracion en funcion del servicio de correo
+
     if host == 'smtp.gmail.com':
         imap = imaplib.IMAP4_SSL('imap.gmail.com')
     else:
         imap = imaplib.IMAP4_SSL('imap-mail.outlook.com')
-
+    ## Iniciar sesion en la cuenta electronica del usuario
     try: 
         imap.login(address, password)
         print('')
@@ -59,6 +62,7 @@ def analyze(address, password, host, port):
         print('')
         return -1
 
+    ## Mandar emails con las muestras de malware
     for fam in settings.COMMON_MALWARE_FAMILIES:
         print('')
         print(colored(str(fam).upper() + ':','white',attrs=['underline','bold']))
@@ -77,7 +81,7 @@ def analyze(address, password, host, port):
 
 
 
-
+## Mandar email con una muestra de malware como archivo adjunto
 def send_mail(family, hash, host, port, address):
     status = 0
 

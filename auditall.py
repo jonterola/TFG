@@ -7,7 +7,7 @@ from attacks.navigation import in_navigation, out_navigation
 from attacks.endpoint import endpoint
 from termcolor import colored
 from cryptography.fernet import Fernet
-
+from getpass import getpass 
 
 arguments = sys.argv[1:]
 
@@ -21,14 +21,10 @@ run_options = {
 }
 
 
-##EMAIL##
+##user: pruebas.auditall@gmail.com  
+##pass: EwX6kBYBPxkTtAR
 
-## Address. Example: hello@gmail.com
-ADDRESS = "pruebas.auditall@gmail.com"
-## Password.
-PASSWORD = "EwX6kBYBPxkTtAR"
-
-
+## Dar la opcion al usuario de escoger el servicio de email a utilizar para iniciar sesion
 def askService():
     print('')
     print('Email service not detected. Which service are you using?')
@@ -44,7 +40,7 @@ def askService():
 
     askService()
 
-##Eliminar muestras de malware descargadas
+## Eliminar muestras de malware descargadas
 def clear():
     malwareDirectoryPath = str(settings.DIRECTORY_PATH) + '/malsamples/'
     shutil.rmtree(malwareDirectoryPath)
@@ -55,7 +51,7 @@ def clear():
     if os.path.exists(str(settings.DIRECTORY_PATH)+ '/attacks/email/malware/'):
         shutil.rmtree(str(settings.DIRECTORY_PATH)+ '/attacks/email/malware/')
         
-##Depuracion de los argumentos del comando
+## Depuracion de los argumentos del comando
 
 try:
     arguments, values = getopt.getopt(arguments, short_options, long_options)
@@ -63,20 +59,20 @@ except getopt.error as err:
     print (str(err))
     sys.exit(2)
 
-##Ningun argumento
+## Ningun argumento
 if(len(arguments) == 0):
     sys.exit("Usage: python auditall.py [--help] [--email] [--navigation] [--endpoint]")
 
-##Argumento help más otros argumentos
+## Argumento help más otros argumentos
 if (("-h","") in arguments or ("--help", "") in arguments) and len(arguments) > 1:
     sys.exit("Usage: python auditall.py [--help] [--email] [--navigation] [--endpoint]")
 
-##Mas argumentos de los permitidos
+## Mas argumentos de los permitidos
 if (("-h","") not in arguments and ("--help", "") not in arguments) and len(arguments) > 4 :
     sys.exit("Usage: python auditall.py [--help] [--email] [--navigation] [--endpoint]")
 
 
-##Obtencion de los valores de los argumentos
+## Obtencion de los valores de los argumentos
 for current_argument, current_value in arguments:
     if current_argument in ("-h", "--help"):
         print ('''Usage: python auditall.py [--help] [--email] [--navigation] [--endpoint]
@@ -101,19 +97,19 @@ for current_argument, current_value in arguments:
     else:
         sys.exit("Unknown argument: \'" + current_argument + "\'")
 
-##Si firstTime = True  ==> es necesario recopilar malware de la BD
-##             = False ==> no hacer llamadas a la BD 
+## Si firstTime = True  ==> es necesario recopilar malware de la BD
+##              = False ==> no hacer llamadas a la BD 
 firstTime = True
 
 
 settings.init()
 
-##Generación de la clave de encriptacion para la descarga de las muestras
+## Generación de la clave de encriptacion para la descarga de las muestras
 clave = Fernet.generate_key()
 with open(str(settings.DIRECTORY_PATH) + '/malcrypto/clave.key', 'wb') as key :
     key.write(clave)
 
-##Creacion de la carpeta malsamples donde se guardaran todas las muestras comprimidas
+## Creacion de la carpeta malsamples donde se guardaran todas las muestras comprimidas
 malwarePath = str(settings.DIRECTORY_PATH) + '/malsamples/'
 if os.path.exists(malwarePath):
     shutil.rmtree(malwarePath)
@@ -136,22 +132,14 @@ try:
         print('')
         print('')
 
-        #Creación de la carpeta malware
-        emailMalwarePath = str(settings.DIRECTORY_PATH)+ '/attacks/email/malware/'
-        if os.path.exists(emailMalwarePath):
-            shutil.rmtree(emailMalwarePath)
-        os.mkdir(emailMalwarePath)
+        
 
-        for fam in settings.COMMON_MALWARE_FAMILIES :
-            os.mkdir(emailMalwarePath + str(fam)+ '/')
-
-        ## Recopilar malware en caso de ser necesario
-        if firstTime == True:
-            email.getMalware()
-            firstTime = False
+        ## Obtener credenciales de email
+        address = input("Email address: ")
+        password = getpass()
 
         ## Obtener servicio de email y configurar HOST y PORT
-        service = email.getEmailService(ADDRESS)
+        service = email.getEmailService(address)
 
         if service == 'N':
             service = askService()
@@ -177,8 +165,22 @@ try:
                 host = 'smtp-mail.outlook.com'
                 port = '587'
 
+            ## Creación de la carpeta malware
+            emailMalwarePath = str(settings.DIRECTORY_PATH)+ '/attacks/email/malware/'
+            if os.path.exists(emailMalwarePath):
+                shutil.rmtree(emailMalwarePath)
+            os.mkdir(emailMalwarePath)
+
+            for fam in settings.COMMON_MALWARE_FAMILIES :
+                os.mkdir(emailMalwarePath + str(fam)+ '/')
+
+            ## Recopilar malware en caso de ser necesario
+            if firstTime == True:
+                email.getMalware()
+                firstTime = False
+
             ## Comenzar envío y analisis de emails
-            if(email.analyze(ADDRESS, PASSWORD, host, port) != -1):
+            if(email.analyze(address, password, host, port) != -1):
 
                 ## Generar fichero json a partir de los resultados del analisis
                 email.dict2json()
@@ -248,7 +250,7 @@ try:
         print('')
         print('')
 
-        #Creación de la carpeta malware
+        ## Creación de la carpeta malware
         endpointMalwarePath = str(settings.DIRECTORY_PATH)+ '/attacks/endpoint/malware/'
         if os.path.exists(endpointMalwarePath):
             shutil.rmtree(endpointMalwarePath)
@@ -262,9 +264,10 @@ try:
             endpoint.getMalware()   
             firstTime = False
 
-
+        ## Comenzar analisis de endpoint
         endpoint.analyze()
 
+        ## Generar fichero con resultados
         endpoint.dict2json()
 
         print('')
@@ -272,7 +275,7 @@ try:
         str(settings.DIRECTORY_PATH) + '/docs/endpoint.json')
         print('')
 
-
+    ## Limpiar muestras
     clear()
 
 except KeyboardInterrupt:

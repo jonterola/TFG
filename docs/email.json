@@ -1,61 +1,61 @@
 {
                 "malware" : [
                         {
-                            "hash": "60ad9b79fa3fd8d43aad5145ae7916fe04f55e487864946cad9523eaa8de02dd",
+                            "hash": "16b6a06b59af6a99d9d3e19a58561b44b992e7f16a9d4638e4aafe0c5e0fc898",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "emailstatus": "blocked"
                         },
                         {
-                            "hash": "a9394c83b0d854b8f5de050acb34fa7d06cdb1ecf5f515b2de51425df135d0f2",
+                            "hash": "55fdef1d67405c3cf1c8f45513eacf1a20471be30274bca32d79a5ce7a5e38b3",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "emailstatus": "blocked"
                         },
                         {
-                            "hash": "a8aa7d49c7292086bd38e39a597ab8babf8991fe463fcbba26ff4cbac5473ed6",
+                            "hash": "6d81f9590b47bae8c14eed7a14bb28921ba9407703651b088b8e178489fd3194",
+                            "filetype": "img",
+                            "malfamily": "AgentTesla",
+                            "emailstatus": "blocked"
+                        },
+                        {
+                            "hash": "f8f3a24e97b0c9e4941baab62a4eeb64b9cc7e82ad97398b95b58fbf1289fb24",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "emailstatus": "blocked"
                         },
                         {
-                            "hash": "d493dca078d9747550efd2f30838858ad063f2f702878cdd67e1a84a4ff25020",
+                            "hash": "cabfc28d0118a2709bf1c7a44b082964d9d209b692d029bb475dc1d629908376",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "emailstatus": "blocked"
                         },
                         {
-                            "hash": "e4bba9c2af86f903aeecbaf44534222faf78b07bdb4c7604e747ecd6898e38e2",
+                            "hash": "0edd73b38c89b8fc1462b04e38c1844f7bc4a8b7602015925006c9903ed09f8e",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "emailstatus": "blocked"
                         },
                         {
-                            "hash": "1d9c52f0726c9514e0051e033ec7259daa42d1876503aa79f6ec37c5de41f2be",
+                            "hash": "47b0af9b50206647f7b75c6ec08f83eedfc2e6235d1252c7af7f14404b85ddb6",
+                            "filetype": "ace",
+                            "malfamily": "AgentTesla",
+                            "emailstatus": "blocked"
+                        },
+                        {
+                            "hash": "31add9afe290ba4157a4a2ddc29d86485c3f444d35d273a4cca293c1fb55bcd0",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "emailstatus": "blocked"
                         },
                         {
-                            "hash": "cbc1a87cf822070c64227c1f2b2485692bc75a4ba7d0f141e6d25e9f264336c2",
-                            "filetype": "gz",
+                            "hash": "fb975df21501fc5a8b91ea42014a3ff5aee588be9fc958003838fcb6a7d74716",
+                            "filetype": "iso",
                             "malfamily": "AgentTesla",
                             "emailstatus": "blocked"
                         },
                         {
-                            "hash": "0982b1fead8070929f56d0f38888115a22983af4c855c67bddb5372b8631e72f",
-                            "filetype": "zip",
-                            "malfamily": "AgentTesla",
-                            "emailstatus": "blocked"
-                        },
-                        {
-                            "hash": "35fc817e28e7d4490f85e283b947337b7e92485c7eb26f88b139d717ba8d3f73",
-                            "filetype": "zip",
-                            "malfamily": "AgentTesla",
-                            "emailstatus": "blocked"
-                        },
-                        {
-                            "hash": "c56b29bf89bb20786e552f160cb6495926c71ba441824f585af96c480f0b85ee",
+                            "hash": "e2b6d03b8580b415e56ab917eb2f131d1b1086bbcc9fee88c390ec3469ed12e6",
                             "filetype": "exe",
                             "malfamily": "AgentTesla",
                             "emailstatus": "blocked"
