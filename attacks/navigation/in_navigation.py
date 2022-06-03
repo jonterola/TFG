@@ -19,8 +19,12 @@ def analyze():
         print('')
 
         for url in settings.URLDICT[fam]:
-            
-            r = requests.head(url)
+            try:
+                r = requests.head(url)
+            except:
+                print('')
+                print(colored('[\u2713] URL : ' + url + ' has been blocked.','green',attrs=['bold']))
+                print('')
 
             if(r.status_code != 200):
                 print('')

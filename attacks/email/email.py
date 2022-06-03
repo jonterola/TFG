@@ -4,7 +4,6 @@ from os.path import basename
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.utils import COMMASPACE, formatdate
 from malcrypto import cryptography
 from attacks import crawler
 from termcolor import colored
@@ -151,7 +150,7 @@ def check_inbox(imap, malhash):
                 print(colored('[*] Message with ' + str(msg['subject']) + ' has arrived to SPAM.','yellow', attrs=['bold']))
                 return 'spam'
 
-    print('[\u2713] Message with HASH: ' + str(malhash) + ' | DOCTYPE: ' + str(settings.MALWAREDICT[family][hash][0]) + ' has been blocked.')
+    print('[\u2713] Message with HASH: ' + str(malhash) + ' has been blocked.')
     return 'None'
     
 
@@ -164,7 +163,7 @@ def dict2json():
                 "malware" : [
                         {
                             ''')
-
+                            
     ##Flatten de todas las familias de malware
     malList = []
     for fam in settings.COMMON_MALWARE_FAMILIES:
@@ -173,7 +172,6 @@ def dict2json():
             dictionary[fam][mal].append(mal)
             malware = dictionary[fam][mal]
             malList.append(malware)
-
 
     ##Formato para todos los elementos menos el ultimo
     for mal in malList[:-1]:

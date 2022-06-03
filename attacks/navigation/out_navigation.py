@@ -13,8 +13,12 @@ def analyze():
         print('')
 
         for url in settings.URLDICT[fam]:
-            
-            r = requests.get(settings.URLDICT[fam][url][1] + '://' + settings.URLDICT[fam][url][0])
+            try:
+                r  = requests.get(settings.URLDICT[fam][url][1] + '://' + settings.URLDICT[fam][url][0])
+            except:
+                print('')
+                print(colored('[\u2713] DOMAIN/IP : ' + settings.URLDICT[fam][url][0] + ' has been blocked.','green',attrs=['bold']))
+                print('')
 
             if(r.status_code != 200):
                 print('')

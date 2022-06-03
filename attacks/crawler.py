@@ -101,7 +101,8 @@ def getMalwareSamples(malwareInfo, malwareFamily):
             data = {'query': 'get_file', 'sha256_hash': mal}
             url = "https://mb-api.abuse.ch/api/v1/"
             malfile = requests.post(url, data=data)
-
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
         except:
             print("Something went wrong... :(")
     
