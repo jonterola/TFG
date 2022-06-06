@@ -69,7 +69,7 @@ def analyze(address, password, host, port):
         for mal in settings.MALWAREDICT[fam]:
             if send_mail(fam, mal, 'smtp.gmail.com', '587', address) == 0:
                 time.sleep(1)
-                emailStatus = check_inbox(imap)
+                emailStatus = check_inbox(imap, mal)
 
                 if(emailStatus == 'inbox'):
                     settings.MALWAREDICT[fam][mal][2] = 'inbox'
@@ -135,7 +135,7 @@ def check_inbox(imap, malhash):
     for response_part in msg_data:
         if isinstance(response_part, tuple):
             msg = email.message_from_bytes(response_part[1])
-            if str(msg['subject']).startswith('HASH: ' + str(malhash)):
+            if str(msg['subject']).split("HASH:")[1][3:].startswith(str(malhash)):
                 print(colored('[X] Message with ' + str(msg['subject']) + ' has arrived to INBOX.','red',attrs=['bold']))
                 return 'inbox'
 
@@ -150,7 +150,7 @@ def check_inbox(imap, malhash):
                 print(colored('[*] Message with ' + str(msg['subject']) + ' has arrived to SPAM.','yellow', attrs=['bold']))
                 return 'spam'
 
-    print('[\u2713] Message with HASH: ' + str(malhash) + ' has been blocked.')
+    print(colored('[\u2713] Message with HASH: ' + str(malhash) + ' has been blocked.','green',attrs=['bold']))
     return 'None'
     
 
